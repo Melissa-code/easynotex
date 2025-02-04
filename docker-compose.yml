@@ -1,0 +1,57 @@
+services:
+  # Backend: Laravel + Apache
+  app:
+    build:
+      context: ./backend  # Utilise le Dockerfile dans le dossier backend
+      dockerfile: Dockerfile  # Le nom du Dockerfile que tu viens de créer
+    container_name: laravel_app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./backend:/var/www/html  # Monte le dossier backend dans le conteneur
+    ports:
+      - "8080:80"  # Accès Laravel via http://localhost:8080
+    depends_on:
+      - db
+    networks:
+      - laravel
+
+  # Base de données: MySQL
+  db:
+    image: mysql:8
+    container_name: mysql_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel_db
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Ajout d'un script d'initialisation
+      - ./my.cnf:/etc/mysql/my.cnf 
+    networks:
+      - laravel
+
+  # Frontend: Vue.js avec Node.js
+  frontend:
+    image: node:18
+    container_name: vuejs_app
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"  # Vue.js (http://localhost:5173)
+    command: ["sh", "-c", "npm install && npm run dev"]
+    depends_on:
+      - app
+    networks:
+      - laravel
+
+networks:
+  laravel:
+
+volumes:
+  db_data:
