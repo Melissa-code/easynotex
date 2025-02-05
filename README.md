@@ -3,7 +3,7 @@
 
 --- 
 
-## Installation 
+## Installation
 
 ### 1. Configuration du docker-compose.yml
 
@@ -107,7 +107,26 @@ DB_PASSWORD=password
 ```
 
 - Sortir du conteneur Laravel `exit`
-- Relancer tous les conteneurs (-d) : `docker-compose up -d
-`
+- Relancer tous les conteneurs (-d) : 
+`docker-compose up -d`
 
+
+### 3. Installer Vuejs dans Docker 
+
+- Supprimer `package-lock.json`: `cd frontend` puis `rm package-lock.json`
+- Installer Vue: `npm create vite@latest . --template vue`
+- Installer les dépendances: `npm install`
+- Exécuter: `npm run dev`
+- Tester l'URL: `http://localhost:5173/`
+- Modifier cette ligne dans `package.json`: 
+```
+"scripts": {
+  "dev": "vite --host",
+  "build": "vite build",
+  "preview": "vite preview"
+},
+```
+
+- Revenir à la racine `cd ..`
+- Lancer le backend + frontend avec Docker: `docker-compose up -d --build`
 
