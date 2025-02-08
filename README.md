@@ -130,3 +130,35 @@ DB_PASSWORD=password
 - Revenir à la racine `cd ..`
 - Lancer le backend + frontend avec Docker: `docker-compose up -d --build`
 
+
+---
+
+## Création de la base de données
+
+1. Créer les migrations (définition des tables dans la base de données)
+
+- Dans le conteneur Laravel `docker exec -it laravel_app bash`
+- la table users existe déjà par défault, crée les 2 autres: 
+- `php artisan make:migration create_categories_table`
+- `php artisan make:migration modify_users_table --table=users`
+- `php artisan make:migration create_notes_table`
+
+
+2. Exécuter les migrations 
+
+- Applique les migrations `php artisan migrate`
+- Pour annuler `php artisan migrate:rollback`
+- sinon, entrer dans le conteneur mysql: `docker exec -it mysql_db bash`
+- se connecter à la base de données `mysql -u username -p` et `USE laravel_db`
+
+- Vérifier la création des tables avec `php artisan migrate:status` 
+
+
+3. Créer les modèles Eloquent (php artisan make:model)
+
+4. Ajouter les relations dans les modèles (hasMany, belongsTo...)
+
+5. Créer les contrôleurs API (php artisan make:controller).
+6. Créer les routes API (routes/api.php).
+7. Implémenter les fonctionnalités CRUD dans les contrôleurs.
+8. Tester avec Postman ou un client API.
