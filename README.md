@@ -200,7 +200,16 @@ App\Models\User::find(1);
 
 ---
 
-5. Créer les contrôleurs API (php artisan make:controller).
-6. Créer les routes API (routes/api.php).
-7. Implémenter les fonctionnalités CRUD dans les contrôleurs.
-8. Tester avec Postman ou un client API.
+## 6. Créer les routes API (routes/api.php).
+
+- Vérifier le chargement des routes dans Providers/AppServiceProvider méthode boot(); 
+- Après avoir créer le contrôleur et sa méthode
+- Vérifier l'existance de la route: php artisan route:list
+
+## 7. Créer les contrôleurs API (php artisan make:controller).
+
+`php artisan make:controller NoteController`
+
+
+- Implémenter les fonctionnalités CRUD dans les contrôleurs.
+- Tester avec Postman ou un client API.
