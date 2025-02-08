@@ -149,12 +149,14 @@ DB_PASSWORD=password
 - Applique les migrations `php artisan migrate`
 - Pour annuler `php artisan migrate:rollback`
 - sinon, entrer dans le conteneur mysql: `docker exec -it mysql_db bash`
-- se connecter à la base de données `mysql -u username -p` et `USE laravel_db`
+- se connecter à la base de données `mysql -u username -p` 
+- se déplacer dans la base de données: `USE laravel_db`
 
 - Vérifier la création des tables avec `php artisan migrate:status` 
 
 
-3. Créer les modèles Eloquent (php artisan make:model)
+3. Créer les modèles Eloquent pour chaque table 
+`php artisan make:model Category`
 
 4. Ajouter les relations dans les modèles (hasMany, belongsTo...)
 
