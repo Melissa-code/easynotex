@@ -71,7 +71,7 @@ volumes:
 ### 2. Démarrer Docker et créer les containers
 
 - Dans un terminal (Powershell par exemple), lancer la commande: 
-`docker-compose up -d`
+`docker-compose up -d`; `docker-compose down`
 
 - Pour vérifier que les containers tournent bien: 
 `docker ps`
@@ -158,7 +158,47 @@ DB_PASSWORD=password
 3. Créer les modèles Eloquent pour chaque table 
 `php artisan make:model Category`
 
-4. Ajouter les relations dans les modèles (hasMany, belongsTo...)
+
+4. Ajouter les relations dans les modèles
+
+- dans les models, ajouter les relations one to many:
+`hasMany`, `belongsTo`
+
+
+5. Insérer des données de tests
+
+- Créer des seeders: `php artisan make:seeder CategoriesTableSeeder`
+- Remplir les seeders avec des données 
+- Utiliser Faker pour générer des données aléatoires
+- Lier les seeders à DatabaseSeeder pour qu'ils soient exécutés avec `php artisan db:seed`
+- Vérifier si les données sont bien insérées dans la base en lignes de commande `SELECT * FROM categories;`
+
+- Pour créer un Administrateur changer le rôle d'un user 
+- `php artisan tinker`
+- Modifier l'utilisateur ID n°1: 
+```
+$user = App\Models\User::find(1);
+$user->role = 'admin'; 
+$user->save(); 
+```
+- Vérifier le changement `App\Models\User::find(1)->role;`
+```
+App\Models\User::find(1);
+= App\Models\User {#5195
+    id: 1,
+    first_name: "Ava",
+    last_name: "Keebler",
+    email: "dare.raymundo@koch.com",
+    email_verified_at: null,
+    #password: "$2y$12$g1kuEKgx/m/c8cKE.xumHOxn02mNF.l208QMD38xtMvduwF4r5zb.",
+    role: "admin",
+    #remember_token: null,
+    created_at: "2025-02-08 14:50:24",
+    updated_at: "2025-02-08 15:02:01",
+  }
+```
+
+---
 
 5. Créer les contrôleurs API (php artisan make:controller).
 6. Créer les routes API (routes/api.php).

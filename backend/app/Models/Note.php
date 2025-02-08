@@ -16,7 +16,7 @@ class Note extends Model
      * One to Many
      * Une Note appartient à une Category
      */
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
