@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\NoteRepository;
+use Illuminate\Http\JsonResponse;
 
 class NoteController extends Controller
 {
@@ -13,20 +14,35 @@ class NoteController extends Controller
         $this->noteRepository = $noteRepository;
     }
 
-    public function test()
+    /**
+     * Get notes by User order by created_at 
+     */
+    public function getNotesByUser($userId): JsonResponse
     {
-        return response()->json(['message' => 'NoteController fonctionne !'], 200);
+        $notes = $this->noteRepository->getNotesByUser($userId);
+
+        if ($notes->isEmpty()) {
+            return response()->json(
+                ['message' => 'Aucune note trouvée pour cet utilisateur'], 
+                404
+            );
+        }
+
+        return response()->json($notes, 200);
     }
 
     /**
-     * Get notes by User
+     * Get notes by User order by favorite 
      */
-    public function getNotesByUser($id)
+    public function getNotesByUserOrderByFavorite($userId): JsonResponse
     {
-        $notes = $this->noteRepository->getNotesByUser($id);
+        $notes = $this->noteRepository->getNotesByUserOrderByFavorite($userId);
 
         if ($notes->isEmpty()) {
-            return response()->json(['message' => 'Aucune note trouvée pour cet utilisateur'], 404);
+            return response()->json(
+                ['message' => 'Aucune note trouvée pour cet utilisateur'], 
+                404
+            );
         }
 
         return response()->json($notes, 200);
