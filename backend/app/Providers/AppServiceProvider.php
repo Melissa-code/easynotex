@@ -14,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(NoteRepository::class, function ($app) {
-            return new NoteRepository;
+            return new NoteRepository();
         });
     }
 

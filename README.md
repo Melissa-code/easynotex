@@ -235,6 +235,7 @@ App\Models\User::find(1);
 - Installer php-cs-fixer `composer require --dev friendsofphp/php-cs-fixer`
 - Ajoute ce fichier `touch .php-cs-fixer.php`
 - Installer `composer require --dev gordinskiy/line-length-checker`
+- cf [gordinskiy](https://packagist.org/packages/gordinskiy/line-length-checke)`
 - Ajouter dans le fichier `.php-cs-fixer.php`: 
 ```
 return (new PhpCsFixer\Config())
@@ -247,5 +248,9 @@ return (new PhpCsFixer\Config())
 - ajout de la barre verticale de 120 caractères, recommandé pour une meilleure lisibilité du code ( Fichier → Préférences → Settings → serach "editor.rulers" Clique sur "Modifier en JSON" et ajoute "editor.rulers": [120] )
 
 - Pour vérifier : `php vendor/bin/php-cs-fixer fix --dry-run`
+- Pour voir les différences `php vendor/bin/php-cs-fixer fix app/Repositories/NoteRepository.php --dry-run --diff`
 - Pour corriger: `php vendor/bin/php-cs-fixer fix app/Repositories/NoteRepository.php`
 
+### Gestion des erreurs 
+
+- Voir les logs dans le fichier `storage/logs/laravel.log` ou bien taper `tail -f storage/logs/laravel.log`
