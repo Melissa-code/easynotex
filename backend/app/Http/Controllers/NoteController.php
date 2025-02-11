@@ -15,7 +15,7 @@ class NoteController extends Controller
     }
 
     /**
-     * Get notes by User order by created_at 
+     * Get notes by User order by created_at
      */
     public function getNotesByUser($userId): JsonResponse
     {
@@ -23,7 +23,7 @@ class NoteController extends Controller
 
         if ($notes->isEmpty()) {
             return response()->json(
-                ['message' => 'Aucune note trouvée pour cet utilisateur'], 
+                ['message' => 'Aucune note trouvée pour cet utilisateur'],
                 404
             );
         }
@@ -32,7 +32,7 @@ class NoteController extends Controller
     }
 
     /**
-     * Get notes by User order by favorite 
+     * Get notes by User order by favorite
      */
     public function getNotesByUserOrderByFavorite($userId): JsonResponse
     {
@@ -40,7 +40,7 @@ class NoteController extends Controller
 
         if ($notes->isEmpty()) {
             return response()->json(
-                ['message' => 'Aucune note trouvée pour cet utilisateur'], 
+                ['message' => 'Aucune note trouvée pour cet utilisateur'],
                 404
             );
         }

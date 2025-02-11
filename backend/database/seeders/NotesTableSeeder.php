@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker;
 
 class NotesTableSeeder extends Seeder
 {
@@ -15,12 +14,12 @@ class NotesTableSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
-        
-        // Get all the users & categories
-        $users = DB::table('users')->pluck('id');  
-        $categories = DB::table('categories')->pluck('id');  
 
-        for ($i = 0; $i < 6; $i++) { 
+        // Get all the users & categories
+        $users = DB::table('users')->pluck('id');
+        $categories = DB::table('categories')->pluck('id');
+
+        for ($i = 0; $i < 6; $i++) {
             DB::table('notes')->insert([
                 'user_id' => $faker->randomElement($users),
                 'category_id' => $faker->randomElement($categories),

@@ -213,3 +213,39 @@ App\Models\User::find(1);
 
 - Implémenter les fonctionnalités CRUD dans les contrôleurs.
 - Tester avec Postman ou un client API.
+
+
+## Code style
+
+### Laravel Pint est un correcteur de style de code PHP. 
+
+- Il est construit sur PHP-CS-Fixer et permet de garantir facilement que le style de votre code reste propre et cohérent
+- Pint est automatiquement installé avec toutes les nouvelles applications Laravel
+- Dans le container laravel_app lance la commande: `./vendor/bin/pint`
+
+
+### Pour utiliser PHP-CS-Fixer: 
+
+- Installer Composer dans le container laravel_app: `curl -sS https://getcomposer.org/installer | php`
+- Vérifier `php composer.phar --version`
+- Pour utiliser Composer globalement dans ton conteneur, il faut le déplacer:
+`mkdir -p /usr/local/bin` puis `mv composer.phar /usr/local/bin/composer`
+- Vérifier `composer --version`
+
+- Installer php-cs-fixer `composer require --dev friendsofphp/php-cs-fixer`
+- Ajoute ce fichier `touch .php-cs-fixer.php`
+- Installer `composer require --dev gordinskiy/line-length-checker`
+- Ajouter dans le fichier `.php-cs-fixer.php`: 
+```
+return (new PhpCsFixer\Config())
+    // ...
+    ->setRules([
+        'Gordinskiy/line_length_limit' => ['max_length' => 115],
+    ])
+;
+```
+- ajout de la barre verticale de 120 caractères, recommandé pour une meilleure lisibilité du code ( Fichier → Préférences → Settings → serach "editor.rulers" Clique sur "Modifier en JSON" et ajoute "editor.rulers": [120] )
+
+- Pour vérifier : `php vendor/bin/php-cs-fixer fix --dry-run`
+- Pour corriger: `php vendor/bin/php-cs-fixer fix app/Repositories/NoteRepository.php`
+

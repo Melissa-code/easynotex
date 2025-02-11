@@ -23,7 +23,7 @@ class Note extends Model
 
     /**
      * One to Many
-     * Une Note appartient à un User 
+     * Une Note appartient à un User
      */
     public function user(): BelongsTo
     {
