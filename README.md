@@ -254,3 +254,8 @@ return (new PhpCsFixer\Config())
 ### Gestion des erreurs 
 
 - Voir les logs dans le fichier `storage/logs/laravel.log` ou bien taper `tail -f storage/logs/laravel.log`
+
+
+### Tests unitaires 
+- `php artisan make:test UserTest --unit`
+- `php artisan test --filter NoteControllerTest`

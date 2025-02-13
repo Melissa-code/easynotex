@@ -16,13 +16,13 @@ class NoteRepository
                 ->join('categories', 'notes.category_id', '=', 'categories.id')
                 ->where('notes.user_id', $userId)
                 ->select(
-                    'notes.id as note_id',
+                    'notes.id',
                     'notes.title',
                     'notes.content',
                     'notes.created_at',
                     'notes.updated_at',
                     'notes.isFavorite',
-                    'categories.name as categories_name'
+                    'categories.name as category_name'
                 )
                 ->orderBy('notes.created_at', 'desc')
                 ->get();
@@ -47,7 +47,7 @@ class NoteRepository
                 'notes.created_at',
                 'notes.updated_at',
                 'notes.isFavorite',
-                'categories.name as categories_name'
+                'categories.name as category_name'
             )
             ->orderBy('notes.isFavorite', 'desc')
             ->orderBy('notes.created_at', 'desc')
