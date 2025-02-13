@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\NoteRepository;
-use Illuminate\Http\JsonResponse;
 use Exception;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use App\Repositories\NoteRepository;
 
 class NoteController extends Controller
 {
@@ -52,9 +53,14 @@ class NoteController extends Controller
                 return response()->json(['message' => 'L\'identifiant utilisateur est invalide'], 400);
             }
 
+            if (!User::find($userId)) {
+                Log::error("Utilisateur non trouvé: $userId");
+                return response()->json(['message' => 'Utilisateur non trouvé'], 404);
+            }            
+
             $notes = $getNotes();
 
-            if (!$notes) {
+            if ($notes->isEmpty()) {
                 Log::error("Aucune note trouvée pour cet utilisateur: $userId");
                 return response()->json(['message' => 'Aucune note trouvée pour cet utilisateur'], 404);
             }

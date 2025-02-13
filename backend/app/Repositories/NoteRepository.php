@@ -24,7 +24,7 @@ class NoteRepository
                     'notes.isFavorite',
                     'categories.name as category_name'
                 )
-                ->orderBy('notes.created_at', 'desc')
+                ->orderBy('notes.updated_at', 'desc')
                 ->get();
         } catch (QueryException $e) {
             Log::error("Erreur SQL dans getNotesByUser pour userId: $userId", [
@@ -50,7 +50,7 @@ class NoteRepository
                 'categories.name as category_name'
             )
             ->orderBy('notes.isFavorite', 'desc')
-            ->orderBy('notes.created_at', 'desc')
+            ->orderBy('notes.updated_at', 'desc')
             ->get();
         } catch (QueryException $e) {
             Log::error("Erreur SQL dans getNotesByUserOrderByFavorite pour userId: $userId", [
