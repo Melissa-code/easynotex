@@ -56,7 +56,7 @@ class NoteController extends Controller
             if (!User::find($userId)) {
                 Log::error("Utilisateur non trouvé: $userId");
                 return response()->json(['message' => 'Utilisateur non trouvé'], 404);
-            }            
+            }
 
             $notes = $getNotes();
 
