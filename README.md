@@ -259,3 +259,10 @@ return (new PhpCsFixer\Config())
 ### Tests unitaires 
 - `php artisan make:test UserTest --unit`
 - `php artisan test --filter NoteControllerTest`
+
+
+### Tailwind CSS
+- lien CDN
+
+
+

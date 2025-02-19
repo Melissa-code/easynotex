@@ -13,6 +13,38 @@
   --red: #FF6B6B; 
   --yellow: #FFE66D; 
 
+  .light-grey {
+    background-color: #D8D8D8;
+  }
+  .mid-grey {
+    background-color: #989898;
+  }
+  .dark-grey {
+    background-color: #626262;
+  }
+  .white {
+    background-color: #FFFFFF;
+  }
+  .black {
+    background-color: #000000;
+  }
+  .dark-green {
+    background-color:#1A535C; 
+  }
+  .light-green {
+    background-color:#4ECDC4; 
+  }
+  .light {
+    background-color:#F7FFF7; 
+  }
+  .red {
+    background-color:#FF6B6B; 
+  }
+  .yellow {
+    background-color:#FFE66D;
+  }
+
+
   /* Fonts */
   --base-font: "Catamaran", serif;
   --title-font: "Poppins", serif;
@@ -40,13 +72,11 @@
 
 body {
   margin: 0;
-  display: flex;
-  /* place-items: center; */
   min-width: 320px;
   min-height: 100vh;
   font-family: "Catamaran", serif;
   font-size: 1em;
-}
+} 
 
 h1 {
   font-size: 3.2em;
@@ -88,17 +118,18 @@ button:focus-visible {
 }
 
 a {
-  font-weight: 500;
-  color: #000000;
-  text-decoration: inherit;
+  color: var(--dark-green); 
 }
 
 a:hover {
   color: #4ECDC4; 
 }
 
-.card {
-  padding: 2em;
+svg {
+  transform: scale(1.2); /*  50% */
 }
 
 
+.card {
+  padding: 2em;
+}
