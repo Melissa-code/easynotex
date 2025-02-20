@@ -3,7 +3,7 @@
 
     <section class="h-20 flex items-center bg-[--yellow-light] ">
       <div class="container mx-auto px-4">
-        <div class="grid grid-cols-4 gap-4 items-center">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center px-4">
           <div></div> 
           <div class="col-span-2 relative">
             <!-- input-->    
