@@ -14,14 +14,14 @@
                         <div class="hidden sm:ml-6 sm:block">
                             <div class="flex space-x-2">
                                 <!-- EasyNotex -->
-                                <a href="#" class="py-2 text-black text-sm font-medium hover:text-light-green" id="brand">
+                                <a href="#" class="py-2 text-black text-sm font-medium hover:text-light-green brand">
                                     <span>EasyNotex</span>
                                 </a>
                             </div>
                         </div>
                     </div>
                     <!-- Links -->
-                    <div class="gap-3 absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                    <div class="gap-5 absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                         <!-- Démo: camera -->
                         <a href="#" class="text-black">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-6">
@@ -59,7 +59,7 @@
 </script>
 
 <style scoped>
-    #brand {
+    .brand {
         font-size: 2.2rem;
         font-family: "Poppins", serif;
         font-weight: 700;

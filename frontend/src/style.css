@@ -118,7 +118,7 @@ button:focus-visible {
 }
 
 a {
-  color: var(--dark-green); 
+  color: var(--black); 
 }
 
 a:hover {
