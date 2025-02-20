@@ -12,6 +12,7 @@
   --light: #F7FFF7; 
   --red: #FF6B6B; 
   --yellow: #FFE66D; 
+  --yellow-light: rgba(255, 230, 109, 0.2);
 
   .light-grey {
     background-color: #D8D8D8;

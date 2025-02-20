@@ -8,7 +8,7 @@
                         <div class="flex shrink-0 items-center">
                             <!-- logo -->
                             <a href="#">
-                                <img class="h-9 w-auto" src="../assets/logo.svg" alt="logo EasyNotex">
+                                <img class="h-9 w-auto" src="../../assets/logo.svg" alt="logo EasyNotex">
                             </a>
                         </div>
                         <div class="hidden sm:ml-6 sm:block">

@@ -4,9 +4,9 @@
     <!-- Footer -->
     <footer class="light border-t border-t-green-800 text-black">
         <div class="w-full max-w-screen-xl mx-auto px-2 sm:px-6 lg:px-8 md:py-2">
-            <div class="sm:flex sm:items-center sm:justify-between">
+            <div class="sm:flex sm:items-center sm:justify-between pt-2">
                 <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
-                    <img src="../assets/logo.svg" class="h-8" alt="EasyNotex logo">
+                    <img src="../../assets/logo.svg" class="h-8" alt="EasyNotex logo">
                     <span class="self-center text-2xl font-bold whitespace-nowrap text-black">
                       EasyNotex
                     </span>
@@ -26,8 +26,7 @@
                   </li>
                 </ul>
             </div>
-            <hr class="my-4 border-lime-700">
-            <span class="block text-sm sm:text-center">
+            <span class="block text-sm sm:text-center mt-1">
               © {{ currentYear }} 
               <a href="#" class="brand">
                 EasyNotex

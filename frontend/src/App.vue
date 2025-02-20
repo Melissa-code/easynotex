@@ -1,7 +1,8 @@
 <script setup>
-  import NavBarComponent from './components/NavBarComponent.vue';
-  import NotesComponent from './components/NotesComponent.vue';
-  import FooterComponent from './components/FooterComponent.vue';
+  import NavBarComponent from './components/layout/NavBarComponent.vue';
+  import NotesComponent from './components/notes/NotesComponent.vue';
+  import FooterComponent from './components/layout/FooterComponent.vue';
+  import SearchBarComponent from './components/notes/SearchBarComponent.vue';
 </script>
 
 <template>
@@ -10,6 +11,7 @@
   </header>
 
   <main>
+    <SearchBarComponent />
     <NotesComponent />
     
   </main>
