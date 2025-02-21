@@ -80,21 +80,22 @@ body {
 } 
 
 h1 {
-  font-size: 3.2em;
+  font-size: 2rem;
   line-height: 1.1;
   font-family: "Poppins", serif;
+  text-align: center;
 }
 
 h2 {
-  font-size: 2em;
+  font-size: 1.5rem;
   line-height: 1.1;
   font-family: "Poppins", serif;
 }
 
 h3 {
-  font-size: 1em;
-  line-height: 1.1;
+  font-size: 1rem;
   font-family: "Poppins", serif;
+  font-weight: 600;
 }
 
 button {
@@ -123,9 +124,4 @@ a:hover {
 
 svg {
   transform: scale(1.2); /*  50% */
-}
-
-
-.card {
-  padding: 2em;
 }

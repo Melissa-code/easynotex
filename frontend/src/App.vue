@@ -4,7 +4,7 @@
   import FooterComponent from './components/layout/FooterComponent.vue';
   
   import SearchBarComponent from './components/notes/SearchBarComponent.vue';
-  import CreateNoteBanner from './components/notes/CreateNoteBanner.vue';
+  import CreateNoteBannerComponent from './components/notes/CreateNoteBannerComponent.vue';
 </script>
 
 <template>
@@ -14,8 +14,8 @@
 
   <main>
     <SearchBarComponent />
+    <CreateNoteBannerComponent />
     <NotesComponent />
-    <CreateNoteBanner />
   </main>
 
   <footer>

@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <section class="h-20 flex items-center bg-[--yellow] border-t border-t-green-800">
+    <section class="h-20 flex items-center bg-[--yellow] border-y border-y-green-800">
       <div class="container mx-auto px-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
           <div class="col-span-1 md:col-span-1"></div>

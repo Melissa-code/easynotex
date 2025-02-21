@@ -264,5 +264,5 @@ return (new PhpCsFixer\Config())
 ### Tailwind CSS
 - lien CDN
 
-
+- pour les date: `npm install date-fns`
 
