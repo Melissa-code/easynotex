@@ -9,7 +9,7 @@ export default {
 </script>
 
 <template>
-  <div class="flex justify-center ">
+  <div class="flex justify-center">
     <nav class="flex justify-between items-center mb-4">
       <a href="#" class="flex items-center px-3 text-sm text-gray-500">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
@@ -19,7 +19,7 @@ export default {
         Précédent
       </a>
         <div>
-          <a href="#" class="px-3 pb-1 text-sm text-white bg-[--dark-green] rounded-md hover:bg-gray-300">1</a>
+          <a href="#" class="px-3 py-1 text-sm text-white bg-[--dark-green] rounded-md hover:bg-gray-500">1</a>
           <a href="#" class="px-3 py-1 text-sm text-gray-500">2</a>
           <a href="#" class="px-3 py-1 text-sm text-gray-500">3</a>
         </div>

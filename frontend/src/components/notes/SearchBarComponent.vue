@@ -20,7 +20,7 @@
             <input 
               type="text" 
               placeholder="Rechercher une note" 
-              class="w-full p-2 pl-10 border rounded-full focus:ring-1 focus:ring-green-900 focus:outline-none" 
+              class=" border border-gray-300 text-gray-500 w-full p-2 pl-10 border rounded-full focus:ring-1 focus:ring-green-900 focus:outline-none" 
             />
           </div>
           <div></div> 

@@ -9,20 +9,22 @@
 </script>
 
 <template>
-  <header>
-    <NavBarComponent />
-  </header>
+  <div>
+    <header>
+      <NavBarComponent />
+    </header>
 
-  <main>
-    <SearchBarComponent />
-    <CreateNoteBannerComponent />
-    <NotesComponent />
-    <PaginationComponent />
-  </main>
+    <main>
+      <SearchBarComponent />
+      <CreateNoteBannerComponent />
+      <NotesComponent />
+      <PaginationComponent />
+    </main>
 
-  <footer>
-    <FooterComponent />
-  </footer>
+    <footer>
+      <FooterComponent />
+    </footer>
+  </div>
 </template>
 
 <style scoped>

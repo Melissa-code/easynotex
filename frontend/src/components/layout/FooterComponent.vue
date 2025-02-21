@@ -2,8 +2,8 @@
 <template>
   <div>
     <!-- Footer -->
-    <footer class="light border-t border-t-green-800 text-black">
-        <div class="w-full max-w-screen-xl mx-auto px-2 sm:px-6 lg:px-8 md:py-2">
+    <section class="light border-t border-t-green-800 text-black">
+        <div class="w-full max-w-screen-xl mx-auto px-2 sm:px-6 lg:px-8 md:py-1">
             <div class="sm:flex sm:items-center sm:justify-between pt-2">
                 <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
                     <img src="../../assets/logo.svg" class="h-8" alt="EasyNotex logo">
@@ -26,15 +26,15 @@
                   </li>
                 </ul>
             </div>
-            <span class="block text-sm sm:text-center mt-1">
+            <span class="block text-sm sm:text-center mt-1 md:mt-0">
               © {{ currentYear }} 
               <a href="#" class="brand">
                 EasyNotex
               </a>
               - tous droits réservés 
             </span>
-        </div>
-    </footer>
+      </div>
+    </section>
   </div>
 </template>
 
