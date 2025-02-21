@@ -48,36 +48,37 @@
 </script>
 
 <template>
-    <div>
-        <section class="py-10 md:py-20">
-            <div class="container mx-auto px-4">
-                <div class="title">
-                    <h1 class="hidden">Toutes mes Notes</h1>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    <!-- Cards -->
-                    <div class="bg-white rounded-2xl border border-[--dark-green] overflow-hidden" v-for="note in notes"
-                        :key="note.id">
-                        <!-- Title -->
-                        <div class="p-4 border-b border-b-[--dark-green] bg-[--yellow-light] text-center">
-                            <h3 class="text-[--dark-green]">{{ note.title.toUpperCase() }}</h3>
-                        </div>
-                        <!-- Infos -->
-                        <div class="p-4">
-                            <ul>
-                                <li class="text-sm mb-4">{{ getDisplayedDate(note) }}</li>
-                                <li class="mb-4 font-semibold flex justify-between">
-                                    <span class="">{{ note.category_name }}</span>
-                                    <span v-if="note.isFavorite === 1" class="favorite-icon" v-html="diplayFavorite(note.isFavorite)"></span>
-                                </li>
-                                <li class="text-justify">{{ truncate(note.content, 150) }}</li>
-                            </ul>
-                        </div>
+    <section class="py-10 md:py-20">
+        <div class="container mx-auto px-4">
+            <!-- Page title h1 -->
+            <div class="title">
+                <h1 class="hidden">Toutes mes Notes</h1>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <!-- Cards -->
+                <div class="bg-white rounded-2xl border border-[--dark-green] overflow-hidden" v-for="note in notes"
+                    :key="note.id">
+                    <!-- Title -->
+                    <div class="p-4 border-b border-b-[--dark-green] bg-[--yellow-light] text-center">
+                        <h3 class="text-[--dark-green]">{{ note.title.toUpperCase() }}</h3>
+                    </div>
+                    <!-- Infos -->
+                    <div class="p-4">
+                        <ul>
+                            <li class="text-sm mb-4">{{ getDisplayedDate(note) }}</li>
+                            <li class="mb-4 font-semibold flex justify-between">
+                                <span class="">{{ note.category_name }}</span>
+                                <span v-if="note.isFavorite === 1" class="favorite-icon" 
+                                    v-html="diplayFavorite(note.isFavorite)">
+                                </span>
+                            </li>
+                            <li class="text-justify">{{ truncate(note.content, 150) }}</li>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
 </template>
 
 <style scoped>

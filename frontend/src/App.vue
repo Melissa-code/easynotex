@@ -5,6 +5,7 @@
   
   import SearchBarComponent from './components/notes/SearchBarComponent.vue';
   import CreateNoteBannerComponent from './components/notes/CreateNoteBannerComponent.vue';
+  import PaginationComponent from './components/shared/PaginationComponent.vue';
 </script>
 
 <template>
@@ -16,6 +17,7 @@
     <SearchBarComponent />
     <CreateNoteBannerComponent />
     <NotesComponent />
+    <PaginationComponent />
   </main>
 
   <footer>
