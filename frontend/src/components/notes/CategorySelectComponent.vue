@@ -21,6 +21,7 @@
           console.error("Erreur lors de la récupération des catégories", error);
         }
       },
+      // event"category-selected" (with value this.selectedCategory) to parent
       emitSelection() {
         this.$emit("category-selected", this.selectedCategory);
       }
@@ -37,7 +38,7 @@
       @change="emitSelection"
     >
       <!-- options values -->
-      <option value="">Catégorie</option>
+      <option value="" class="">Catégorie</option>
       <option v-for="category in categories" :key="category.id" :value="category.id" class="light-green">
         {{ category.name }}
       </option>

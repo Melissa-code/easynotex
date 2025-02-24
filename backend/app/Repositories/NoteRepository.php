@@ -22,6 +22,7 @@ class NoteRepository
                     'notes.created_at',
                     'notes.updated_at',
                     'notes.isFavorite',
+                    'notes.category_id',
                     'categories.name as category_name'
                 )
                 ->orderBy('notes.updated_at', 'desc')
@@ -47,6 +48,7 @@ class NoteRepository
                 'notes.created_at',
                 'notes.updated_at',
                 'notes.isFavorite',
+                'notes.category_id',
                 'categories.name as category_name'
             )
             ->orderBy('notes.isFavorite', 'desc')
