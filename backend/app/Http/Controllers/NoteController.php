@@ -10,12 +10,10 @@ use App\Repositories\NoteRepository;
 
 class NoteController extends Controller
 {
-    protected $noteRepository;
 
-    public function __construct(NoteRepository $noteRepository)
-    {
-        $this->noteRepository = $noteRepository;
-    }
+    public function __construct(
+        protected NoteRepository $noteRepository
+    ) {}
 
     /**
      * Get notes by User order by created_at

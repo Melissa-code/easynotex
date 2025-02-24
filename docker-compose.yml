@@ -2,8 +2,8 @@ services:
   # Backend: Laravel + Apache
   app:
     build:
-      context: ./backend  # Utilise le Dockerfile dans le dossier backend
-      dockerfile: Dockerfile  # Le nom du Dockerfile que tu viens de créer
+      context: ./backend  # Dockerfile dans backend
+      dockerfile: Dockerfile  
     container_name: laravel_app
     restart: unless-stopped
     working_dir: /var/www/html
@@ -30,7 +30,7 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Ajout d'un script d'initialisation
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # script d'initialisation
       - ./my.cnf:/etc/mysql/my.cnf 
     networks:
       - laravel
