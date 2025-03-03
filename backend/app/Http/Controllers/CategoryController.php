@@ -14,6 +14,11 @@ class CategoryController extends Controller
     ) {
     }
 
+    /**
+     * Get all the categories
+     *
+     * @return JsonResponse
+      */
     public function getCategories(): JsonResponse
     {
         try {

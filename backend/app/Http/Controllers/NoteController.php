@@ -62,19 +62,19 @@ class NoteController extends Controller
     {
         try {
             if (!is_numeric($userId) || $userId <= 0) {
-                Log::error("L\'identifiant utilisateur est invalide: $userId");
+                Log::warning("L\'identifiant utilisateur est invalide: $userId");
                 return response()->json(['message' => 'L\'identifiant utilisateur est invalide'], 400);
             }
 
             if (!User::where('id', $userId)->exists()) {
-                Log::error("Utilisateur non trouvé: $userId");
+                Log::warning("Utilisateur non trouvé: $userId");
                 return response()->json(['message' => 'Utilisateur non trouvé'], 404);
             }
 
             $notes = $getNotes();
 
             if ($notes->isEmpty()) {
-                Log::error("Aucune note trouvée pour cet utilisateur: $userId");
+                Log::warning("Aucune note trouvée pour cet utilisateur: $userId");
                 return response()->json(['message' => 'Aucune note trouvée pour cet utilisateur'], 404);
             }
 

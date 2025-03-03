@@ -35,6 +35,7 @@ class NoteControllerTest extends TestCase
                 'created_at',
                 'updated_at',
                 'isFavorite',
+                'category_id',
                 'category_name'
                 ])
             )
@@ -90,6 +91,7 @@ class NoteControllerTest extends TestCase
                 'created_at',
                 'updated_at',
                 'isFavorite',
+                'category_id',
                 'category_name'
                 ])
             )

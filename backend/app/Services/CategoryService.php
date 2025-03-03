@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Repositories\CategoryRepository;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
+use Exception;
 
 class CategoryService
 {
@@ -12,8 +14,19 @@ class CategoryService
     ) {
     }
 
+    /**
+     * Get all the categories
+     *
+     * @return Collection
+     * @throws Exception
+     */
     public function getCategories(): Collection
     {
-        return $this->categoryRepository->getCategoriesInAlphabeticalOrder();
+        try {
+            return $this->categoryRepository->getCategoriesInAlphabeticalOrder();
+        } catch (Exception $e) {
+            Log::error("Erreur dans CategoryService getCategories() " . $e->getMessage());
+            throw $e;
+        }
     }
 }
