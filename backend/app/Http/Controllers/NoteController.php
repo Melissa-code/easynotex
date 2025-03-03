@@ -6,25 +6,27 @@ use Exception;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use App\Repositories\NoteRepository;
+use App\Services\NoteService;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 
 class NoteController extends Controller
 {
     public function __construct(
-        protected NoteRepository $noteRepository
+        protected NoteService $noteService
     ) {
     }
 
     /**
-     * Get notes by User order by created_at
+     * Get notes of a user order by updated_at
+     *
+     * @param string $userId
+     * @return JsonResponse
      */
     public function getNotesByUser(string $userId): JsonResponse
     {
         return $this->fetchNotes(
             function () use ($userId) {
-                return $this->noteRepository->getNotesByUser((int)$userId);
+                return $this->noteService->getNotesByUser((int)$userId);
             },
             (int)$userId,
             'Erreur dans getNotesByUser'
@@ -32,19 +34,30 @@ class NoteController extends Controller
     }
 
     /**
-     * Get notes by User order by favorite
+     * Get notes of a user order by favorites
+     *
+     * @param string $userId
+     * @return JsonResponse
      */
     public function getNotesByUserOrderByFavorite(string $userId): JsonResponse
     {
         return $this->fetchNotes(
             function () use ($userId) {
-                return $this->noteRepository->getNotesByUserOrderByFavorite((int)$userId);
+                return $this->noteService->getNotesByUserOrderByFavorite((int)$userId);
             },
             (int)$userId,
             'Erreur dans getNotesByUserOrderByFavorite'
         );
     }
 
+    /**
+    * Get notes of the user
+    *
+    * @param callable $getNotes
+    * @param int $userId
+    * @param string $errorContext
+    * @return JsonResponse
+    */
     private function fetchNotes(callable $getNotes, int $userId, string $errorContext): JsonResponse
     {
         try {
@@ -53,7 +66,7 @@ class NoteController extends Controller
                 return response()->json(['message' => 'L\'identifiant utilisateur est invalide'], 400);
             }
 
-            if (!User::find($userId)) {
+            if (!User::where('id', $userId)->exists()) {
                 Log::error("Utilisateur non trouvé: $userId");
                 return response()->json(['message' => 'Utilisateur non trouvé'], 404);
             }

@@ -38,7 +38,7 @@
       @change="emitSelection"
     >
       <!-- options values: categories -->
-      <option value="" class="">Catégories</option>
+      <option value="" class="">Toutes les catégories</option>
       <option v-for="category in categories" :key="category.id" :value="category.id" class="light-green">
         {{ category.name }}
       </option>
