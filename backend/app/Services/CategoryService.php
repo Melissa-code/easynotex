@@ -23,7 +23,9 @@ class CategoryService
     public function getCategories(): Collection
     {
         try {
-            return $this->categoryRepository->getCategoriesInAlphabeticalOrder();
+            $categories = $this->categoryRepository->getCategoriesInAlphabeticalOrder();
+
+            return $categories;
         } catch (Exception $e) {
             Log::error("Erreur dans CategoryService getCategories() " . $e->getMessage());
             throw $e;

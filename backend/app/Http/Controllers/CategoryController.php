@@ -6,6 +6,7 @@ use Exception;
 use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Response;
 
 class CategoryController extends Controller
 {
@@ -25,7 +26,7 @@ class CategoryController extends Controller
             $categories = $this->categoryService->getCategories();
 
             if ($categories->isEmpty()) {
-                Log::warning()("Aucune catégorie trouvée.");
+                Log::warning("Aucune catégorie trouvée.");
                 return response()->json(['message' => 'Aucune catégorie trouvée.'], 404);
             }
 
@@ -33,6 +34,7 @@ class CategoryController extends Controller
 
         } catch (Exception $e) {
             Log::error("Erreur lors de la récupération des catégories : " . $e->getMessage());
+
             return response()->json([
                 'message' => "Une erreur est survenue lors de la récupération des catégories.",
                 'error' => $e->getMessage()
