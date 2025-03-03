@@ -30,15 +30,15 @@
 </script>
 
 <template>
-  <!-- Sort by category -->
+  <!-- Sort by category (select the category) -->
   <div class="grid shrink-0 grid-cols-1 focus-within:relative">
     <select id="category" name="category" aria-label="Category" 
       class="appearance-none col-start-1 row-start-1 w-full rounded-full focus:outline-none" 
       v-model="selectedCategory" 
       @change="emitSelection"
     >
-      <!-- options values -->
-      <option value="" class="">Catégorie</option>
+      <!-- options values: categories -->
+      <option value="" class="">Catégories</option>
       <option v-for="category in categories" :key="category.id" :value="category.id" class="light-green">
         {{ category.name }}
       </option>

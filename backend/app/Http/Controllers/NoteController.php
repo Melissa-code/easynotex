@@ -7,13 +7,15 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\NoteRepository;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class NoteController extends Controller
 {
-
     public function __construct(
         protected NoteRepository $noteRepository
-    ) {}
+    ) {
+    }
 
     /**
      * Get notes by User order by created_at

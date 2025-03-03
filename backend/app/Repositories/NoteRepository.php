@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+//use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
@@ -27,11 +28,14 @@ class NoteRepository
                 )
                 ->orderBy('notes.updated_at', 'desc')
                 ->get();
+            //->paginate(3);
+
         } catch (QueryException $e) {
             Log::error("Erreur SQL dans getNotesByUser pour userId: $userId", [
                 'error' => $e->getMessage()
             ]);
             return collect([]);
+            //return null;
         }
     }
 

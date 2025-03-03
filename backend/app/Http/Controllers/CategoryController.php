@@ -7,12 +7,12 @@ use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
-
 class CategoryController extends Controller
 {
     public function __construct(
         protected CategoryService $categoryService
-    ) {}
+    ) {
+    }
 
     public function getCategories(): JsonResponse
     {

@@ -21,8 +21,6 @@
             filteredNotes() {
                 if (this.selectedCategory) {
                     return this.notes.filter(note => {
-                        //console.log(typeof note.category_id)
-                        //console.log(typeof this.selectedCategory)
                         return note.category_id === this.selectedCategory; 
                     });
                 }
@@ -59,10 +57,10 @@
 </script>
 
 <template>
-    <section class="py-5">
+    <section class="py-4">
         <div class="container mx-auto px-4">
             <!-- Button: Sort by favoris -->
-            <div class="pb-10 md:pb-20 flex justify-end items-center">
+            <div class="pb-4 flex justify-end items-center">
                 <span class="mr-2">Trier par </span>
                 <button class="rounded-full mr-2" @click="toggleFavorites">
                     {{ showFavorites ? "Récentes" : "Favoris" }}

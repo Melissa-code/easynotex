@@ -11,19 +11,19 @@ class CategoryRepository
 {
     public function getCategoriesInAlphabeticalOrder(): Collection
     {
-      try {
-        return DB::table('categories')
-          ->select(
-              'categories.id',
-              'categories.name',
-          )
-          ->orderBy('categories.name', 'asc')
-          ->get();
-      } catch (QueryException $e) {
-          Log::error("Erreur SQL dans le controller getCategories()", [
-              'error' => $e->getMessage()
-          ]);
-          return collect([]);
-      }
+        try {
+            return DB::table('categories')
+              ->select(
+                  'categories.id',
+                  'categories.name',
+              )
+              ->orderBy('categories.name', 'asc')
+              ->get();
+        } catch (QueryException $e) {
+            Log::error("Erreur SQL dans le controller getCategories()", [
+                'error' => $e->getMessage()
+            ]);
+            return collect([]);
+        }
     }
 }
