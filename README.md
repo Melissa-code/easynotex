@@ -257,8 +257,24 @@ return (new PhpCsFixer\Config())
 
 
 ### Tests unitaires 
+
+back 
 - `php artisan make:test UserTest --unit`
 - `php artisan test --filter NoteControllerTest`
+
+front 
+- `npm install --save-dev vitest`
+- `npm list --depth=0` pour vérifier l'installation 
+- ajouter "test" dans package.json :
+```
+ "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
+```
+- `npm run test` ou `npx vitest`pour lancer les tests
 
 
 ### Tailwind CSS
