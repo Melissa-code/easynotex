@@ -276,6 +276,11 @@ front
 ```
 - `npm run test` ou `npx vitest`pour lancer les tests
 
+- `npm install @testing-library/vue`
+- `npm install --save-dev jsdom`
+- `npx vitest run tests/unit/notes/NoteCardComponent.test.js`
+- tout `npm run test`
+
 
 ### Tailwind CSS
 - lien CDN
