@@ -1,6 +1,6 @@
 <script setup>
   import NavBarComponent from './components/layout/NavBarComponent.vue';
-  import NotesComponent from './components/notes/NotesComponent.vue';
+  import NotesView from './views/NotesView.vue';
   import FooterComponent from './components/layout/FooterComponent.vue';
   
   import SearchBarComponent from './components/notes/SearchBarComponent.vue';
@@ -17,7 +17,7 @@
     <main>
       <SearchBarComponent />
       <CreateNoteBannerComponent />
-      <NotesComponent />
+      <NotesView />
       <PaginationComponent />
     </main>
 
