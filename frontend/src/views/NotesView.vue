@@ -26,12 +26,12 @@
       methods: {
           async fetchNotes() {
               try {
-                  const url = this.showFavorites
-                      ? 'http://127.0.0.1:8080/api/notes/favorite/user/3'
-                      : 'http://127.0.0.1:8080/api/notes/user/3';
+                const url = this.showFavorites
+                ? `${import.meta.env.VITE_API_URL}/api/notes/favorite/user/3`
+                : `${import.meta.env.VITE_API_URL}/api/notes/user/3`;
 
-                  const response = await axios.get(url);
-                  this.notes = response.data;
+                const response = await axios.get(url);
+                this.notes = response.data;
               } catch (error) {
                   console.error('Erreur lors de la récupération des notes:', error);
               }

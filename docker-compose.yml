@@ -44,6 +44,8 @@ services:
       - ./frontend:/app
     ports:
       - "5173:5173"  # Vue.js (http://localhost:5173)
+    environment:
+      - VITE_API_URL=http://127.0.0.1:8080
     command: ["sh", "-c", "npm install && npm run dev"]
     depends_on:
       - app
