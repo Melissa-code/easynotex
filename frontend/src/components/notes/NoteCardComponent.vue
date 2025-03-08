@@ -1,23 +1,3 @@
-<template>
-  <div class="bg-white rounded-2xl border border-[--dark-green] overflow-hidden">
-      <!-- Title -->
-      <div class="p-4 border-b border-b-[--dark-green] bg-[--yellow-light] text-center">
-          <h3 class="text-[--dark-green]">{{ truncatedTitle }}</h3>
-      </div>
-      <!-- Infos -->
-      <div class="p-4">
-          <ul>
-              <li class="text-sm mb-4">{{ displayedDate }}</li>
-              <li class="mb-4 font-semibold flex justify-between">
-                  <span>{{ note.category_name }}</span>
-                  <span v-if="note.isFavorite === 1" class="favorite-icon" v-html="displayFavorite()"></span>
-              </li>
-              <li class="text-justify">{{ truncatedContent }}</li>
-          </ul>
-      </div>
-  </div>
-</template>
-
 <script>
   export default {
     name: 'NoteCardComponent',
@@ -55,6 +35,26 @@
     }
   };
 </script>
+
+<template>
+  <div class="bg-white rounded-2xl border border-[--dark-green] overflow-hidden">
+      <!-- Title -->
+      <div class="p-4 border-b border-b-[--dark-green] bg-[--yellow-light] text-center">
+          <h3 class="text-[--dark-green]">{{ truncatedTitle }}</h3>
+      </div>
+      <!-- Infos -->
+      <div class="p-4">
+          <ul>
+              <li class="text-sm mb-4">{{ displayedDate }}</li>
+              <li class="mb-4 font-semibold flex justify-between">
+                  <span>{{ note.category_name }}</span>
+                  <span v-if="note.isFavorite === 1" class="favorite-icon" v-html="displayFavorite()"></span>
+              </li>
+              <li class="text-justify">{{ truncatedContent }}</li>
+          </ul>
+      </div>
+  </div>
+</template>
 
 <style scoped>
   .favorite-icon {
