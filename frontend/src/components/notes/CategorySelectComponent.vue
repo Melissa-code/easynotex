@@ -27,16 +27,20 @@
           }
         }
       },
-      // event"category-selected" (with value this.selectedCategory) to parent
       emitSelection() {
-        this.$emit("category-selected", this.selectedCategory);
+        //this.$emit("category-selected", this.selectedCategory);
+        if (this.selectedCategory === "") {
+          //Emit 'null' to indicate "all categories"
+          this.$emit("category-selected", null); 
+        } else {
+          this.$emit("category-selected", this.selectedCategory);
+        }
       }
     },
     watch: {
       selectedCategory(newValue) {
-        if (newValue !== "") {
-          this.emitSelection(); //event after selectedCategory change
-        }
+        // Trigger event after selectedCategory change
+        this.emitSelection(); 
       }
     }
   };

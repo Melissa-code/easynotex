@@ -3,6 +3,8 @@
     name: 'NoteCardComponent',
     props: {
         note: Object, 
+        required: true,
+        default: () => ({ title: "", content: "", updated_at: "", created_at: "", category_name: "" })
     },
     computed: {
         truncatedTitle() {
@@ -22,7 +24,7 @@
             const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
             return new Date(dateString).toLocaleDateString('fr-FR', options);
         },
-        truncate(text, maxlength) {
+        truncate(text="", maxlength) {
             return text.length > maxlength ? text.slice(0, maxlength -1) + '…' : text;
         },
         displayFavorite() {

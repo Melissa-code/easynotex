@@ -32,13 +32,13 @@ describe("CategorySelectComponent", () => {
 
   it("devrait mettre à jour selectedCategory lorsqu’une option est sélectionnée", async () => {
     const select = wrapper.find("select");
-    await select.setValue("1"); 
+    await select.setValue("1");
     expect(wrapper.vm.selectedCategory).toBe(1);
   });
 
   it('devrait émettre l’événement "category-selected" lors de la sélection', async () => {
     const select = wrapper.find("select");
-    await select.setValue("2"); 
+    await select.setValue("2");
     expect(wrapper.emitted("category-selected")).toBeTruthy();
     expect(wrapper.emitted("category-selected")[0]).toEqual([2]);
   });
