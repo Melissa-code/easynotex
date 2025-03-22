@@ -68,7 +68,7 @@ describe('NotesListComponent', () => {
 
     it('devrait ne pas poser de bug si la prop notes est undefined', () => {
         const wrapper = mount(NotesListComponent, {
-            props: { notes: undefined }
+            props: { notes: undefined } 
         });
     
         expect(wrapper.findAllComponents(NoteCardComponent).length).toBe(0);
