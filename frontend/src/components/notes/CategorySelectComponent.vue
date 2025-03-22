@@ -10,20 +10,33 @@
       };
     },
     mounted() {
-      this.fetchCategories();
+      if (process.env.NODE_ENV !== "test") {
+        this.fetchCategories();
+      }
     },
     methods: {
       async fetchCategories() {
         try {
-          const response = await axios.get("http://127.0.0.1:8080/api/categories");
+          const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/categories`);
           this.categories = response.data.categories;
         } catch (error) {
-          console.error("Erreur lors de la récupération des catégories", error);
+          if (error.response) {
+            console.error("Erreur lors de la récupération des catégories", error);
+          } else {
+            console.error("Erreur réseau lors de la récupération des catégories", error);
+          }
         }
       },
       // event"category-selected" (with value this.selectedCategory) to parent
       emitSelection() {
         this.$emit("category-selected", this.selectedCategory);
+      }
+    },
+    watch: {
+      selectedCategory(newValue) {
+        if (newValue !== "") {
+          this.emitSelection(); //event after selectedCategory change
+        }
       }
     }
   };
@@ -35,7 +48,6 @@
     <select id="category" name="category" aria-label="Category" 
       class="appearance-none col-start-1 row-start-1 w-full rounded-full focus:outline-none" 
       v-model="selectedCategory" 
-      @change="emitSelection"
     >
       <!-- options values: categories -->
       <option value="" class="">Toutes les catégories</option>
@@ -53,5 +65,3 @@
     </svg>
   </div>
 </template>
-
-<style></style>

@@ -5,6 +5,7 @@ import NotesListComponent from '../../../src/components/notes/NotesListComponent
 import NoteCardComponent from '../../../src/components/notes/NoteCardComponent.vue';
 
 describe('NotesListComponent', () => {
+    
     it('devrait rendre le bon nombre de notes', () => {
         const notes = [
             { id: 1, title: 'Note 1', content: 'Contenu 1' },
@@ -81,14 +82,17 @@ describe('NotesListComponent', () => {
         expect(wrapper.classes()).toContain('mx-4'); 
     });
     
-    it('devrait afficher les titres des notes', async () => {
+    it('devrait afficher les titres et contenus des notes', async () => {
         const notes = [
             { id: 1, title: 'Note 1', content: 'Contenu 1' },
             { id: 2, title: 'Note 2', content: 'Contenu 2' }
         ];
+
+        await render(NotesListComponent, { props: { notes } });
     
-        render(NotesListComponent, { props: { notes } });
         expect(await screen.findByText('NOTE 1')).toBeTruthy();
+        expect(await screen.findByText('Contenu 1')).toBeTruthy();
         expect(await screen.findByText('NOTE 2')).toBeTruthy();
+        expect(await screen.findByText('Contenu 2')).toBeTruthy();
     }); 
 });

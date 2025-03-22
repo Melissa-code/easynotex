@@ -3,6 +3,7 @@ import { render, screen } from '../../../node_modules/@testing-library/vue';
 import NoteCardComponent from '../../../src/components/notes/NoteCardComponent.vue';  
 
 describe('NoteCardComponent', () => {
+  
   it('displays note title and description', async () => {
     const note = { 
       title: 'Test titre de la note', 

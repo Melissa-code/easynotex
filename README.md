@@ -279,8 +279,10 @@ front
 - `npm install @testing-library/vue`
 - `npm install --save-dev jsdom`
 - `npx vitest run tests/unit/notes/NoteCardComponent.test.js`
-- tout `npm run test`
+- tout `npm run test` `npx vitest run` avec logs:`npx vitest` (rechargement automatique `npm run test:watch`)
 
+- `npm install cypress --save-dev`
+- 
 
 ### Tailwind CSS
 - lien CDN

@@ -1,5 +1,5 @@
 <script>
-  import NotesListComponent from '../components/notes/NotesListComponent.vue'; // Chemin correct
+  import NotesListComponent from '../components/notes/NotesListComponent.vue'; 
   import CategorySelectComponent from '../components/notes/CategorySelectComponent.vue';
   import axios from 'axios';
 

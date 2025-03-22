@@ -19,9 +19,11 @@
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/test-utils": "^2.4.6",
     "autoprefixer": "^10.4.20",
+    "cypress": "^14.1.0",
     "jsdom": "^26.0.0",
     "postcss": "^8.5.2",
     "vite": "^6.0.5",
-    "vitest": "^3.0.7"
+    "vitest": "^3.0.7",
+    "xhr2": "^0.2.1"
   }
 }

@@ -5,6 +5,9 @@ export default defineConfig({
   plugins: [vue()],
   test: {
     globals: true, 
-    environment: 'jsdom',  
+    environment: 'jsdom', 
+    outputSnapshotDir: 'test-output', 
+    silent: false,
+    setupFiles: './setupTests.js',
   },
 });

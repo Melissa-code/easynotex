@@ -4,7 +4,8 @@
   export default {
       name: 'NotesListComponent',
       props: {
-          notes: Array
+          notes: Array,
+          default: () => []
       },
       components: {
           NoteCardComponent
