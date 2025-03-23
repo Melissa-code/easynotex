@@ -1,17 +1,17 @@
-# <img src="https://i.imgur.com/ySrca07.png" style="width: 30px;" /> EasyNotex 
+# <img src="./frontend/src/assets/logo.svg" style="width: 30px;" /> EasyNotex 
 
 Ce projet est application permettant aux utilisateurs de créer, organiser et gérer facilement leurs notes et tâches via une interface web intuitive.
 
 EasyNotex est conçu avec une approche rigoureuse en prenant en compte les besoins des utilisateurs et une architecture bien définie: 
 
-🔹 [Présentation du projet: contexte et besoin du client]()
-🔹 [Maquettes UI]()
-🔹 [UML Cas d'utilisation]()
-🔹 [UML Diagramme de classes]()
-🔹 [Kanban]()
+- [Présentation du projet: contexte et besoin du client]()
+- [Maquettes UI]()
+- [UML Cas d'utilisation]()
+- [UML Diagramme de classes]()
+- [Kanban]()
 
 
-⚠️ **Statut du projet: en cours de développement** 
+#### ⚠️ Statut du projet: en cours de développement
 
 --- 
 
@@ -95,7 +95,7 @@ npm install
 
 #### 3.5. Accéder aux services: 
 
-- Backend Laravel:  `http://localhost:8000`
+- Backend Laravel:  `http://localhost:8080`
 - Frontend Vue.js:`http://localhost:5173`
 
 ---
@@ -127,13 +127,13 @@ Inscription et connexion via API Laravel Sanctum
 ## 7. Aperçu de l'application web
 
 <span style="display:flex; gap:2rem;">
-  <img src="https://i.imgur.com/e6p5Gnp.png" alt="Aperçu de l'application EasyNotex" />
-  <img src="https://i.imgur.com/TctqhfW.png" alt="Aperçu de l'application EasyNotex" />
+  <img src="./frontend/src/assets/easynotex_notes_desktop.svg" alt="Aperçu de l'application EasyNotex desktop" />
+  <img src="./frontend/src/assets/easynotex_notes_mobile.svg" alt="Aperçu de l'application EasyNotex mobile" />
 </span>
 
 ---
 
-## 8. Documentation du Projet
+## 8. Documentation du projet
 
 Voir doc.md (à venir)
 
