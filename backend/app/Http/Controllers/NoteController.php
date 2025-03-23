@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\User;
+use App\Models\Note;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use App\Services\NoteService;
@@ -86,5 +87,29 @@ class NoteController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+    * Get note by ID of the user
+    *
+    * @param int $noteId
+    * @param string $errorContext
+    * @return JsonResponse
+     */
+    public function getNoteById($noteId)
+    {
+        if (!is_numeric($noteId) || (int)$noteId <= 0) {
+            Log::warning("ID de note invalide : $noteId");
+            return response()->json(['error' => 'ID de note invalide'], 400);
+        }
+    
+        $note = $this->noteService->getNoteById((int)$noteId); 
+      
+        if (!$note) {
+            Log::error("Une erreur est survenue lors de la récupération de la note par ID", $noteId);
+            return response()->json(['error' => 'Note non trouvée'], 404); 
+        }
+
+        return response()->json($note);
     }
 }

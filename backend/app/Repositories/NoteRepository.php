@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 //use Illuminate\Pagination\LengthAwarePaginator;
+
+use App\Models\Note;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
@@ -63,6 +65,28 @@ class NoteRepository
                 'error' => $e->getMessage()
             ]);
             return collect([]);
+        }
+    }
+
+    public function getNoteById(int $noteId): ?Note
+    {
+        try {
+            $note = DB::table('notes')
+                ->join('categories', 'notes.category_id', '=', 'categories.id')
+                ->where('notes.id', $noteId) 
+                ->select(
+                    'notes.*',
+                    'categories.name as category_name'
+                )
+                ->first(); 
+
+            //forceFill() to get all attributes (not only $fillable) 
+            return $note ? (new Note())->forceFill((array) $note) : null;
+        } catch (QueryException $e) {
+            Log::error("Erreur SQL dans getNoteById pour noteId: $noteId", [
+                'error' => $e->getMessage()
+            ]);
+            return null;
         }
     }
 }

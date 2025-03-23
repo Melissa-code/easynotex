@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Note;
 use App\Repositories\NoteRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -44,6 +45,23 @@ class NoteService
             return $this->noteRepository->getNotesByUserOrderByFavorite($userId);
         } catch (Exception $e) {
             Log::error("Erreur dans NoteService getNotesByUserOrderByFavorite(): " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    /**
+     * Get note by ID of the logged user 
+     *
+     * @param int $noteId
+     * @return ?Note
+     * @throws Exception
+     */
+    public function getNoteById($noteId): ?Note
+    {
+        try {
+            return $this->noteRepository->getNoteById($noteId);
+        } catch (Exception $e) {
+            Log::error("Erreur dans NoteService getNotesById(): " . $e->getMessage());
             throw $e;
         }
     }
