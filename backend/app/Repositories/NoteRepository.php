@@ -73,14 +73,14 @@ class NoteRepository
         try {
             $note = DB::table('notes')
                 ->join('categories', 'notes.category_id', '=', 'categories.id')
-                ->where('notes.id', $noteId) 
+                ->where('notes.id', $noteId)
                 ->select(
                     'notes.*',
                     'categories.name as category_name'
                 )
-                ->first(); 
+                ->first();
 
-            //forceFill() to get all attributes (not only $fillable) 
+            //forceFill() to get all attributes (not only $fillable)
             return $note ? (new Note())->forceFill((array) $note) : null;
         } catch (QueryException $e) {
             Log::error("Erreur SQL dans getNoteById pour noteId: $noteId", [

@@ -167,45 +167,110 @@ class NoteControllerTest extends TestCase
     }
 
     /**
+     * Test getNoteById
+     * ID is valid & note exists 
+     */
+    public function testGetNoteById(): void
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->create();
+        $notes = $this->notesFactory($user, $category);
+        $note = $notes[0];
+
+        $response = $this->getJson("/api/notes/{$note->id}");
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'id',
+            'title',
+            'content',
+            'created_at',
+            'updated_at',
+            'isFavorite',
+            'category_id',
+            'category_name',
+            'user_id',
+            'image', 
+        ]);
+
+        $response->assertJson([
+            'id' => $note->id,
+            'title' => $note->title,
+            'content' => $note->content,
+            'created_at' => $note->created_at->toJSON(),
+            'updated_at' => $note->updated_at->toJSON(),
+            'isFavorite' => $note->isFavorite,
+            'category_id' => $note->category_id,
+            'category_name' => $category->name,
+            'user_id' => $note->user_id,
+        ]);
+    }
+
+    /**
+     * Test failed get note by id
+     * id invalid
+     */
+    public function testFailedGetNoteByInvalidId(): void 
+    {
+        $response = $this->getJson("/api/notes/abdhd");
+        $response->assertStatus(400);
+        $response->assertJson(['error' => 'ID de note invalide']);
+
+        $response = $this->getJson("/api/notes/-1"); 
+        $response->assertStatus(400);
+        $response->assertJson(['error' => 'ID de note invalide']);
+    }
+
+    /**
+     * Test failed get note by id
+     * note doesn't exist 
+     */
+    public function testGetNoteByIdNotFound(): void
+    {
+        $response = $this->getJson("/api/notes/9999"); 
+        $response->assertStatus(404);
+        $response->assertJson(['error' => 'Note non trouvée']);
+    }
+
+    /**
      * Create 3 notes for a user 
      * return $arrayNotes[]
      */
-    private function notesFactory($user, $category): array
+    private function notesFactory($user, $category, $count = 3): array
     {
-        $arrayNotes = []; 
-
-        $note1 = Note::factory()->create([
-            'user_id' => $user->id,
-            'category_id' => $category->id,
-            'title' => 'Où sortir ce week-end',
-            'content' => 'Lorem ipsum lorem ipsum...',
-            'isFavorite' => 0,
-            "created_at" => "2025-02-07 14:50:25",
-            "updated_at" => "2025-02-07 14:50:25",
-        ]);
-        $arrayNotes[] = $note1;
-
-        $note2 = Note::factory()->create([
-            'user_id' => $user->id,
-            'category_id' => $category->id,
-            'title' => 'Ne pas oublier de faire...',
-            'content' => 'Lorem ipsum lorem ipsum...',
-            'isFavorite' => 1,
-            "created_at" => "2025-02-08 14:50:25",
-            "updated_at" => "2025-02-08 14:50:25",
-        ]);
-        $arrayNotes[] = $note2;
-
-        $note3 = Note::factory()->create([
-            'user_id' => $user->id,
-            'category_id' => $category->id,
-            'title' => 'Autre note favorite',
-            'isFavorite' => 1, 
-            "created_at" => "2025-02-05 14:50:25",
-            "updated_at" => "2025-02-05 14:50:25",
-        ]);
-        $arrayNotes[] = $note3;
-
+        $notesData = [
+            [
+                'title' => 'Où sortir ce week-end',
+                'content' => 'Lorem ipsum lorem ipsum...',
+                'isFavorite' => 0,
+                "created_at" => "2025-02-07 14:50:25",
+                "updated_at" => "2025-02-07 14:50:25",
+            ],
+            [
+                'title' => 'Ne pas oublier de faire...',
+                'content' => 'Lorem ipsum lorem ipsum...',
+                'isFavorite' => 1,
+                "created_at" => "2025-02-08 14:50:25",
+                "updated_at" => "2025-02-08 14:50:25",
+            ],
+            [
+                'title' => 'Autre note favorite',
+                'content' => 'Lorem ipsum lorem ipsum...',
+                'isFavorite' => 1,
+                "created_at" => "2025-02-05 14:50:25",
+                "updated_at" => "2025-02-05 14:50:25",
+            ],
+        ];
+    
+        $arrayNotes = [];
+        for ($i = 0; $i < $count; $i++) {
+            //index reste toujours entre 0 et 2 pour que le code soit utilisé avec plus de 3 notes
+            $data = $notesData[$i % count($notesData)]; 
+            $data['user_id'] = $user->id;
+            $data['category_id'] = $category->id;
+            $arrayNotes[] = Note::factory()->create($data);
+        }
+    
         return $arrayNotes;
     }
+
 }

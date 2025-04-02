@@ -50,7 +50,7 @@ class NoteService
     }
 
     /**
-     * Get note by ID of the logged user 
+     * Get note by ID of the logged user
      *
      * @param int $noteId
      * @return ?Note

@@ -90,7 +90,7 @@ class NoteController extends Controller
     }
 
     /**
-    * Get note by ID of the user
+    * Get note by ID
     *
     * @param int $noteId
     * @param string $errorContext
@@ -98,18 +98,26 @@ class NoteController extends Controller
      */
     public function getNoteById($noteId)
     {
-        if (!is_numeric($noteId) || (int)$noteId <= 0) {
-            Log::warning("ID de note invalide : $noteId");
-            return response()->json(['error' => 'ID de note invalide'], 400);
-        }
-    
-        $note = $this->noteService->getNoteById((int)$noteId); 
-      
-        if (!$note) {
-            Log::error("Une erreur est survenue lors de la récupération de la note par ID", $noteId);
-            return response()->json(['error' => 'Note non trouvée'], 404); 
-        }
+        try {
+            if (!is_numeric($noteId) || (int)$noteId <= 0) {
+                Log::warning("ID de note invalide : $noteId");
+                return response()->json(['error' => 'ID de note invalide'], 400);
+            }
 
-        return response()->json($note);
+            $note = $this->noteService->getNoteById((int)$noteId);
+
+            if (!$note) {
+                Log::error("Une erreur est survenue lors de la récupération de la note par ID", ['noteId' => $noteId]);
+                return response()->json(['error' => 'Note non trouvée'], 404);
+            }
+
+            return response()->json($note);
+        } catch (Exception $e) {
+            Log::error("Erreur inconnue dans getNoteById()", [
+                'noteId' => $noteId,
+                'error' => $e->getMessage(),
+            ]);
+            return response()->json(['error' => 'Une erreur s\'est produite'], 500);
+        }
     }
 }
