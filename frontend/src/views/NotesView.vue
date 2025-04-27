@@ -1,13 +1,19 @@
 <script>
-  import NotesListComponent from '../components/notes/NotesListComponent.vue'; 
-  import CategorySelectComponent from '../components/notes/CategorySelectComponent.vue';
-  import axios from 'axios';
+  import NotesListComponent from '../components/notes/NotesListComponent.vue'
+  import CategorySelectComponent from '../components/notes/CategorySelectComponent.vue'
+  import SearchBarComponent from '../components/notes/SearchBarComponent.vue'
+  import CreateNoteBannerComponent from '../components/notes/CreateNoteBannerComponent.vue'
+  import PaginationComponent from '../components/shared/PaginationComponent.vue'
+  import axios from 'axios'
 
   export default {
       name: 'NotesView',
       components: {
           NotesListComponent,
           CategorySelectComponent,
+          SearchBarComponent, 
+          CreateNoteBannerComponent, 
+          PaginationComponent,
       },
       data() {
           return {
@@ -51,6 +57,8 @@
 </script>
 
 <template>
+    <SearchBarComponent />
+    <CreateNoteBannerComponent />
     <section class="py-4">
         <div class="container mx-auto px-4">
             <div class="pb-4 flex justify-end items-center">
@@ -63,4 +71,5 @@
             <NotesListComponent :notes="filteredNotes" />
         </div>
     </section>
+    <PaginationComponent /> 
 </template>

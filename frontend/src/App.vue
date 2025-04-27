@@ -6,19 +6,19 @@
   import SearchBarComponent from './components/notes/SearchBarComponent.vue';
   import CreateNoteBannerComponent from './components/notes/CreateNoteBannerComponent.vue';
   import PaginationComponent from './components/shared/PaginationComponent.vue';
+
+  import NoteView from './views/NoteView.vue';
 </script>
 
 <template>
   <div>
+    <!-- navigation -->
     <header>
       <NavBarComponent />
     </header>
 
     <main>
-      <SearchBarComponent />
-      <CreateNoteBannerComponent />
-      <NotesView />
-      <PaginationComponent />
+      <RouterView />
     </main>
 
     <footer>

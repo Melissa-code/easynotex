@@ -40,7 +40,7 @@ EasyNotex est conçu avec une approche rigoureuse en prenant en compte les besoi
 - Front-end: Vue.js + Vite
 - UI: Tailwind CSS
 - Base de données: MySQL
-- Authentification: LAravel Scantum 
+- Authentification: Laravel Scantum 
 - Tests: PHPUnit (Laravel), Vitest et Cypress (Vue.js)
 - Formatage du code: PHP-CS-Fixer
 - IDE recommandé: VSCode
