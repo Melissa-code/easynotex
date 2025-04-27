@@ -1,38 +1,33 @@
 <script>
-  export default {
+export default {
     name: 'NoteComponent',
     props: {
-        note: Object, 
-       // required: true,
-        default: () => ({ 
-            title: "", 
-            content: "", 
-            updated_at: "", 
-            created_at: "", 
-            category_name: "", 
+        note: Object,
+        // required: true,
+        default: () => ({
+            title: "",
+            content: "",
+            image: null,
+            updated_at: "",
+            created_at: "",
+            category_name: "",
             isFavorite: 0,
         })
     },
     loading: {
-      type: Boolean,
-      required: true,
+        type: Boolean,
+        required: true,
     },
     computed: {
         truncatedTitle() {
             if (!this.note || !this.note.title) {
-                return ''; 
+                return '';
             }
             return this.truncate(this.note.title.toUpperCase(), 50);
         },
-        truncatedContent() {
-            if (!this.note || !this.note.content) {
-                return ''; 
-            }
-            return this.truncate(this.note.content, 150);
-        },
         displayedDate() {
             if (!this.note) {
-                return ''; 
+                return '';
             }
             return new Date(this.note.updated_at) > new Date(this.note.created_at)
                 ? `Modifiée le ${this.formatDate(this.note.updated_at)}`
@@ -44,8 +39,8 @@
             const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
             return new Date(dateString).toLocaleDateString('fr-FR', options);
         },
-        truncate(text="", maxlength) {
-            return text.length > maxlength ? text.slice(0, maxlength -1) + '…' : text;
+        truncate(text = "", maxlength) {
+            return text.length > maxlength ? text.slice(0, maxlength - 1) + '…' : text;
         },
         displayFavorite() {
             return `
@@ -55,35 +50,65 @@
             `;
         }
     }
-  };
+};
 </script>
 
 <template>
-  <div class="bg-white rounded-2xl border border-[--dark-green] overflow-hidden" v-if="note && !loading">
-      <!-- Title -->
-      <div class="p-4 border-b border-b-[--dark-green] bg-[--yellow-light] text-center">
-          <h3 class="text-[--dark-green]">{{ truncatedTitle }}</h3>
-      </div>
-      <!-- Infos -->
-      <div class="p-4">
-          <ul>
-              <li class="text-sm mb-4">{{ displayedDate }}</li>
-              <li class="mb-4 font-semibold flex justify-between">
-                  <span>{{ note?.category_name || 'Catégorie inconnue' }}</span>
-                  <span v-if="note && note.isFavorite === 1" class="favorite-icon" v-html="displayFavorite()"></span>
-              </li>
-              <li class="text-justify">{{ truncatedContent }}</li>
-          </ul>
-      </div>
-      
-  </div>
-  <div v-else>
-    <p>Chargement...</p>
-  </div>
+    <div class="container">
+        <div class="bg-white rounded-2xl border border-[--dark-green] overflow-hidden" v-if="note && !loading">
+            <!-- Title -->
+            <div class="p-4 border-b border-b-[--dark-green] bg-[--yellow-light] text-center">
+                <h3 class="text-[--dark-green]">{{ truncatedTitle }}</h3>
+            </div>
+            <!-- Infos -->
+            <div class="p-4">
+                <ul>
+                    <!-- date -->
+                    <li class="text-sm mb-4">{{ displayedDate }}</li>
+                    <!-- category & favorite -->
+                    <li class="mb-4 font-semibold flex justify-between">
+                        <span>Catégorie : {{ note?.category_name || '' }}</span>
+                        <span v-if="note && note.isFavorite === 1" class="favorite-icon"
+                            v-html="displayFavorite()"></span>
+                    </li>
+                    <!-- content -->
+                    <li class="text-justify pt-3">{{ note?.content || '' }}</li>
+                    <!-- image -->
+                    <li class=" pt-3">{{ note.image }}</li>
+                    <li class="flex white">
+                        <!-- Back to list -->
+                        <button type="button" class="rounded-full">
+                            <Router-link to="/">Retour</Router-link>
+                        </button>
+                        <!-- Edit note -->
+                        <button type="button" class="rounded-full"></button>
+                        <!-- Delete note -->
+                        <button type="button" class="rounded-full"></button>
+                        <!-- Download PDF -->
+                        <button type="button" class="rounded-full"></button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </template>
 
 <style scoped>
-  .favorite-icon {
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 75vh;
+}
+
+.bg-white {
+    max-width: 500px;
+    width: 100%;
+    /* // responsive */
+
+}
+
+.favorite-icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -91,5 +116,5 @@
     height: 20px;
     border-radius: 50%;
     background-color: var(--dark-green);
-  }
+}
 </style>

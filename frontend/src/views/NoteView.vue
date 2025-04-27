@@ -42,9 +42,5 @@
 <template>
   <div>
     <NoteComponent v-if="note" :note="note" />
-    <!-- Back to list -->
-    <button>
-      <Router-link to="/">Retour vers la liste des notes</Router-link>
-    </button>
   </div>
 </template>
