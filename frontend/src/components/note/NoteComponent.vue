@@ -14,6 +14,11 @@ export default {
             isFavorite: 0,
         })
     },
+    data() {
+        return {
+            imageExists: true
+        }
+    },
     loading: {
         type: Boolean,
         required: true,
@@ -74,10 +79,12 @@ export default {
                     <!-- content -->
                     <li class="text-justify pt-3">{{ note?.content || '' }}</li>
                     <!-- image -->
-                    <li class="py-5">
-                        <img :src="'/uploads/image_test.jpg'" alt="Image de la note" class="w-32 h-auto" />
+                    <li class="py-5" v-if="note.image">
+                        <!-- @error pour détecter une erreur de chargement d’image -->
+                        <img v-if="imageExists" :src="'/uploads/' + note.image" :alt="'Image de la note n°' + note.id"
+                            class="w-32 h-auto" @error="imageExists = false" />
                     </li>
-                    
+
                     <li class="flex white gap-1">
                         <!-- Back to list -->
                         <button type="button" class="rounded-full">
@@ -105,6 +112,7 @@ export default {
 </template>
 
 <style scoped>
+
 .container {
     display: flex;
     justify-content: center;

@@ -40,7 +40,7 @@
 </script>
 
 <template>
-  <div>
+  <div class="container-fluid bg-[--yellow-light]">
     <NoteComponent v-if="note" :note="note" />
   </div>
 </template>
