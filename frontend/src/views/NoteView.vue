@@ -11,26 +11,26 @@
         }
       },
       data() {
-          return {
-            note : {},
-            loading: true,  // start loading state
-          };
+        return {
+          note : {},
+          loading: true,  // start loading state
+        };
       },
       components: {
-          NoteComponent
+        NoteComponent
       },
       methods: {
         async fetchNote() {
-            try {
-              const noteId = this.$route.params.id;
-              console.log('ID de la note récupéré :', noteId);
-              const url = `${import.meta.env.VITE_API_URL}/api/notes/${noteId}`;
-              const response = await axios.get(url);
-              this.note = response.data;
-              console.log(this.note)
-            } catch (error) {
-                console.error('Erreur lors de la récupération de la note n° ', error);
-            }
+          try {
+            const noteId = this.$route.params.id;
+            console.log('ID de la note récupéré :', noteId);
+            const url = `${import.meta.env.VITE_API_URL}/api/notes/${noteId}`;
+            const response = await axios.get(url);
+            this.note = response.data;
+            console.log(this.note)
+          } catch (error) {
+              console.error('Erreur lors de la récupération de la note n° ', error);
+          }
         },
       },
       mounted() {

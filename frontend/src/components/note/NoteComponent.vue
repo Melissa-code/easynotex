@@ -54,7 +54,7 @@ export default {
 </script>
 
 <template>
-    <div class="container">
+    <div class="container mx-auto px-4">
         <div class="bg-white rounded-2xl border border-[--dark-green] overflow-hidden" v-if="note && !loading">
             <!-- Title -->
             <div class="p-4 border-b border-b-[--dark-green] bg-[--yellow-light] text-center">
@@ -74,18 +74,29 @@ export default {
                     <!-- content -->
                     <li class="text-justify pt-3">{{ note?.content || '' }}</li>
                     <!-- image -->
-                    <li class=" pt-3">{{ note.image }}</li>
-                    <li class="flex white">
+                    <li class="py-5">
+                        <img :src="'/uploads/image_test.jpg'" alt="Image de la note" class="w-32 h-auto" />
+                    </li>
+                    
+                    <li class="flex white gap-1">
                         <!-- Back to list -->
                         <button type="button" class="rounded-full">
-                            <Router-link to="/">Retour</Router-link>
+                            <Router-link to="/">
+                                <span class="text-white">Retour</span>
+                            </Router-link>
                         </button>
                         <!-- Edit note -->
-                        <button type="button" class="rounded-full"></button>
+                        <button type="button" class="rounded-full">
+                            <i class="fas fa-pen fa-sm" style="color: #ffffff;"></i>
+                        </button>
                         <!-- Delete note -->
-                        <button type="button" class="rounded-full"></button>
+                        <button type="button" class="rounded-full">
+                            <i class="fas fa-trash-alt fa-sm" style="color: #ffffff;"></i>
+                        </button>
                         <!-- Download PDF -->
-                        <button type="button" class="rounded-full"></button>
+                        <button type="button" class="rounded-full">
+                            <i class="fas fa-file-pdf fa-sm" style="color: #ffffff;"></i>
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -98,7 +109,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 75vh;
+    height: 80vh;
 }
 
 .bg-white {
