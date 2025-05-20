@@ -1,9 +1,13 @@
 <script>
 export default {
     name: 'NoteComponent',
+    //data from parent
     props: {
         note: Object,
-        // required: true,
+        loading: {
+            type: Boolean,
+            required: false,
+        },
         default: () => ({
             title: "",
             content: "",
@@ -14,14 +18,33 @@ export default {
             isFavorite: 0,
         })
     },
+    //applique le zoom si l’image arrive plus tard
+    watch: {
+        'note.image'(newValue) {
+            if (newValue) {
+            // on attend que le DOM soit bien mis à jour
+            this.$nextTick(() => {
+                import('medium-zoom').then(({ default: mediumZoom }) => {
+                    mediumZoom('.zoomable')
+                })
+            })
+            }
+        }
+    },
     data() {
         return {
             imageExists: true
         }
     },
-    loading: {
-        type: Boolean,
-        required: true,
+    //applique le zoom si l’image est déjà là
+    mounted() {
+        if (this.note.image) {
+            this.$nextTick(() => {
+                import('medium-zoom').then(({ default: mediumZoom }) => {
+                    mediumZoom('.zoomable')
+                })
+            })
+        }
     },
     computed: {
         truncatedTitle() {
@@ -81,8 +104,12 @@ export default {
                     <!-- image -->
                     <li class="py-5" v-if="note.image">
                         <!-- @error pour détecter une erreur de chargement d’image -->
-                        <img v-if="imageExists" :src="'/uploads/' + note.image" :alt="'Image de la note n°' + note.id"
-                            class="w-32 h-auto" @error="imageExists = false" />
+                        <img 
+                            v-if="imageExists" 
+                            :src="'/uploads/' + note.image" 
+                            :alt="'Image de la note n°' + note.id"
+                            class="w-32 h-auto cursor-pointer zoomable"
+                            @error="imageExists = false" />
                     </li>
 
                     <li class="flex white gap-1">
