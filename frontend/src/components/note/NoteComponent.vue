@@ -22,12 +22,12 @@ export default {
     watch: {
         'note.image'(newValue) {
             if (newValue) {
-            // on attend que le DOM soit bien mis à jour
-            this.$nextTick(() => {
-                import('medium-zoom').then(({ default: mediumZoom }) => {
-                    mediumZoom('.zoomable')
+                // on attend que le DOM soit bien mis à jour
+                this.$nextTick(() => {
+                    import('medium-zoom').then(({ default: mediumZoom }) => {
+                        mediumZoom('.zoomable')
+                    })
                 })
-            })
             }
         }
     },
