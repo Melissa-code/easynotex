@@ -1,5 +1,6 @@
 <script>
   import NoteComponent from '../components/note/NoteComponent.vue';
+  import Swal from 'sweetalert2';
   import axios from 'axios';
 
   export default {
