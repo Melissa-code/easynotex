@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
+use Exception;
 use App\Models\Note;
-use App\Repositories\NoteRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Exception;
+use App\Repositories\NoteRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class NoteService
 {
@@ -62,6 +63,24 @@ class NoteService
             return $this->noteRepository->getNoteById($noteId);
         } catch (Exception $e) {
             Log::error("Erreur dans NoteService getNotesById(): " . $e->getMessage());
+            throw $e;
+        }
+    }
+    
+    /**
+     * DELETE note by ID of the logged user
+     *
+     * @param int $noteId
+     * @return ?Note
+     * @throws Exception
+     */
+    public function deleteNoteById($noteId): void
+    {
+        try {
+            $note = Note::findOrFail($noteId);
+            $note->delete(); //suppr in DB
+        } catch (Exception $e) {
+            Log::error("Erreur dans NoteService deleteNoteById(): " . $e->getMessage());
             throw $e;
         }
     }

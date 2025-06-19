@@ -4,18 +4,17 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\User;
-use App\Models\Note;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use App\Services\NoteService;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class NoteController extends Controller
 {
     public function __construct(
         protected NoteService $noteService
-    ) {
-    }
+    ) {}
 
     /**
      * Get notes of a user order by updated_at
@@ -52,13 +51,13 @@ class NoteController extends Controller
     }
 
     /**
-    * Get notes of the user
-    *
-    * @param callable $getNotes
-    * @param int $userId
-    * @param string $errorContext
-    * @return JsonResponse
-    */
+     * Get notes of the user
+     *
+     * @param callable $getNotes
+     * @param int $userId
+     * @param string $errorContext
+     * @return JsonResponse
+     */
     private function fetchNotes(callable $getNotes, int $userId, string $errorContext): JsonResponse
     {
         try {
@@ -90,11 +89,11 @@ class NoteController extends Controller
     }
 
     /**
-    * Get note by ID
-    *
-    * @param int $noteId
-    * @param string $errorContext
-    * @return JsonResponse
+     * Get note by ID
+     *
+     * @param int $noteId
+     * @param string $errorContext
+     * @return JsonResponse
      */
     public function getNoteById($noteId)
     {
@@ -118,6 +117,36 @@ class NoteController extends Controller
                 'error' => $e->getMessage(),
             ]);
             return response()->json(['error' => 'Une erreur s\'est produite'], 500);
+        }
+    }
+
+    /**
+     * DELETE note by ID
+     *
+     * @param int $noteId
+     * @return JsonResponse
+     */
+    public function deleteNoteById($noteId)
+    {
+        try {
+            if (!is_numeric($noteId) || (int)$noteId <= 0) {
+                Log::warning("ID note invalide pour la suppression : $noteId");
+                return response()->json(['error' => 'ID note invalide'], 400);
+            }
+
+            $this->noteService->deleteNoteById((int)$noteId);
+
+            return response()->json(['message' => 'Suppression de la note réussie'], 200);
+            
+        } catch (ModelNotFoundException $e) {
+            Log::warning("Note non trouvée pour suppression", ['noteId' => $noteId]);
+            return response()->json(['error' => 'Note non trouvée'], 404);
+        } catch (Exception $e) {
+            Log::error("Erreur inconnue dans deleteNoteById()", [
+                'noteId' => $noteId,
+                'error' => $e->getMessage(),
+            ]);
+            return response()->json(['error' => 'Une erreur s\'est produite lors de la suppression'], 500);
         }
     }
 }
