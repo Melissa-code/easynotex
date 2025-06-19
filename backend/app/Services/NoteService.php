@@ -71,7 +71,6 @@ class NoteService
      * DELETE note by ID of the logged user
      *
      * @param int $noteId
-     * @return ?Note
      * @throws Exception
      */
     public function deleteNoteById($noteId): void

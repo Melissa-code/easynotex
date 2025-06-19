@@ -232,6 +232,49 @@ class NoteControllerTest extends TestCase
     }
 
     /**
+     * Test delete note by id
+     * 
+     */
+    public function testDeleteNoteById(): void
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->create();
+        $notes = $this->notesFactory($user, $category);
+        $note = $notes[0];
+
+        $response = $this->deleteJson("/api/notes/supprime_note/{$note->id}");//deleteJson()
+        $response->assertStatus(200);
+        $response->assertJson(['message' => 'Suppression de la note réussie']);
+        
+        // noted deleted in DB
+        $this->assertDatabaseMissing('notes', ['id' => $note->id]); 
+    }
+
+    /**
+     * Test delete note by id
+     * invalid ID
+     */
+    public function testFailedDeleteNoteByInvalidId(): void
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->create();
+        $notes = $this->notesFactory($user, $category);
+        $note = $notes[0];
+        // ID string
+        $response = $this->deleteJson("/api/notes/supprime_note/ahfdgdsfdhsf");
+        $response->assertStatus(400);
+        $response->assertJson(['error' => 'ID note invalide']);
+        // ID negatif 
+        $response = $this->deleteJson("/api/notes/supprime_note/-1");
+        $response->assertStatus(400);
+        $response->assertJson(['error' => 'ID note invalide']);
+        // ID ==0
+        $response = $this->deleteJson("/api/notes/supprime_note/0");
+        $response->assertStatus(400);
+        $response->assertJson(['error' => 'ID note invalide']);
+    }
+
+    /**
      * Create 3 notes for a user 
      * return $arrayNotes[]
      */
