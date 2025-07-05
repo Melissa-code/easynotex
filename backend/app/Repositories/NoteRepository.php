@@ -89,4 +89,9 @@ class NoteRepository
             return null;
         }
     }
+
+    public function storeNote(array $data): ?Note
+    {
+        return Note::create($data);
+    }
 }

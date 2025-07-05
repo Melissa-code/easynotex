@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\User;
+use Illuminate\Http\Request;
 use App\Services\NoteService;
-use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class NoteController extends Controller
@@ -95,7 +96,7 @@ class NoteController extends Controller
      * @param string $errorContext
      * @return JsonResponse
      */
-    public function getNoteById($noteId)
+    public function getNoteById($noteId): JsonResponse
     {
         try {
             if (!is_numeric($noteId) || (int)$noteId <= 0) {
@@ -126,7 +127,7 @@ class NoteController extends Controller
      * @param int $noteId
      * @return JsonResponse
      */
-    public function deleteNoteById($noteId)
+    public function deleteNoteById($noteId): JsonResponse
     {
         try {
             if (!is_numeric($noteId) || (int)$noteId <= 0) {
@@ -137,7 +138,6 @@ class NoteController extends Controller
             $this->noteService->deleteNoteById((int)$noteId);
 
             return response()->json(['message' => 'Suppression de la note réussie'], 200);
-            
         } catch (ModelNotFoundException $e) {
             Log::warning("Note non trouvée pour suppression", ['noteId' => $noteId]);
             return response()->json(['error' => 'Note non trouvée'], 404);
@@ -147,6 +147,52 @@ class NoteController extends Controller
                 'error' => $e->getMessage(),
             ]);
             return response()->json(['error' => 'Une erreur s\'est produite lors de la suppression'], 500);
+        }
+    }
+
+    /**
+     * STORE note 
+     * 
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function storeNote(Request $request): JsonResponse
+    {
+        try {
+            $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'string',
+            'date' => 'nullable|date',
+            'is_favorite' => 'nullable|boolean',
+            'image' => 'nullable|image|max:2048',
+            'category_id' => 'nullable|integer',
+            'user_id' => 'nullable|integer'
+        ]);
+        
+        // TODO : Remplacer par utilisateur connecté
+        //$validated['user_id'] = $validated['user_id'] ?? 1;
+
+        $note = $this->noteService->storeNote($validated);
+
+        return response()->json([
+            'message' => 'Note créée avec succès',
+            'note' => $note
+        ], 201);
+        } catch (ValidationException $e) {
+            // Erreur de validation : 422
+            return response()->json([
+                'error' => 'Données invalides',
+                'messages' => $e->errors()
+            ], 422);
+
+        } catch (Exception $e) {
+            Log::error("Erreur inconnue dans storeNote() du contrôleur", [
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'error' => 'Une erreur est survenue lors de la création de la note.'
+            ], 500);
         }
     }
 }

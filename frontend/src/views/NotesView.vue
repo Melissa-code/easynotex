@@ -33,8 +33,8 @@
           async fetchNotes() {
               try {
                 const url = this.showFavorites
-                ? `${import.meta.env.VITE_API_URL}/api/notes/favorite/user/3`
-                : `${import.meta.env.VITE_API_URL}/api/notes/user/3`;
+                ? `${import.meta.env.VITE_API_URL}/api/notes/favorite/user/1`
+                : `${import.meta.env.VITE_API_URL}/api/notes/user/1`;
 
                 const response = await axios.get(url);
                 this.notes = response.data;

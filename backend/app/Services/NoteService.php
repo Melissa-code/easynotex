@@ -17,7 +17,7 @@ class NoteService
     }
 
     /**
-     * Get notes of the user order by updated_at
+     * GET notes of the user order by updated_at
      *
      * @param int $userId
      * @return Collection
@@ -34,7 +34,7 @@ class NoteService
     }
 
     /**
-     * Get notes of the user order by favorites
+     * GET notes of the user order by favorites
      *
      * @param int $userId
      * @return Collection
@@ -51,7 +51,7 @@ class NoteService
     }
 
     /**
-     * Get note by ID of the logged user
+     * GET note by ID of the logged user
      *
      * @param int $noteId
      * @return ?Note
@@ -80,6 +80,34 @@ class NoteService
             $note->delete(); //suppr in DB
         } catch (Exception $e) {
             Log::error("Erreur dans NoteService deleteNoteById(): " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+     
+    /**
+     * CREATE note 
+     * 
+     * @param array $data
+     * @throws Exception
+     */
+    public function storeNote(array $data): ?Note
+    {
+        try {
+            // image 
+            if (isset($data['image'])) {
+                $data['image_path'] = $data['image']->store('notes_images', 'public');
+                unset($data['image']);
+            }
+
+            // date
+            if (!isset($data['created_at'])) {
+                $data['created_at'] = now();
+            }
+
+            return $this->noteRepository->storeNote($data);
+        } catch (Exception $e) {
+            Log::error("Erreur dans NoteService storeNote(): " . $e->getMessage());
             throw $e;
         }
     }
