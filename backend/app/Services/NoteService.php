@@ -100,11 +100,6 @@ class NoteService
                 unset($data['image']);
             }
 
-            // date
-            if (!isset($data['created_at'])) {
-                $data['created_at'] = now();
-            }
-
             return $this->noteRepository->storeNote($data);
         } catch (Exception $e) {
             Log::error("Erreur dans NoteService storeNote(): " . $e->getMessage());

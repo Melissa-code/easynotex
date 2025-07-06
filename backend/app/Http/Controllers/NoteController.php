@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Services\NoteService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\StoreNoteRequest;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -156,35 +157,21 @@ class NoteController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function storeNote(Request $request): JsonResponse
+    public function storeNote(StoreNoteRequest $request): JsonResponse
     {
         try {
-            $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'string',
-            'date' => 'nullable|date',
-            'is_favorite' => 'nullable|boolean',
-            'image' => 'nullable|image|max:2048',
-            'category_id' => 'nullable|integer',
-            'user_id' => 'nullable|integer'
-        ]);
-        
-        // TODO : Remplacer par utilisateur connecté
-        //$validated['user_id'] = $validated['user_id'] ?? 1;
+            $validated = $request->validated();  
+            $note = $this->noteService->storeNote($validated);
 
-        $note = $this->noteService->storeNote($validated);
+            // TODO : Remplacer par utilisateur connecté
+            //$validated['user_id'] = $validated['user_id'] ?? 1;
 
-        return response()->json([
-            'message' => 'Note créée avec succès',
-            'note' => $note
-        ], 201);
-        } catch (ValidationException $e) {
-            // Erreur de validation : 422
+            $note = $this->noteService->storeNote($validated);
+
             return response()->json([
-                'error' => 'Données invalides',
-                'messages' => $e->errors()
-            ], 422);
-
+                'message' => 'Note créée avec succès',
+                'note' => $note
+            ], 201);
         } catch (Exception $e) {
             Log::error("Erreur inconnue dans storeNote() du contrôleur", [
                 'error' => $e->getMessage(),
