@@ -10,7 +10,14 @@ class Note extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'content', 'category_id', 'user_id', 'isFavorite'];
+    protected $fillable = [
+        'title', 
+        'content', 
+        'category_id', 
+        'user_id', 
+        'isFavorite',
+        'image',
+    ];
 
     /**
      * One to Many

@@ -94,12 +94,14 @@ class NoteService
     public function storeNote(array $data): ?Note
     {
         try {
-            // image 
             if (isset($data['image'])) {
-                $data['image_path'] = $data['image']->store('notes_images', 'public');
-                unset($data['image']);
+                // sauvegarde physiquement le fichier image sur le disque(public) dans le dossier 
+                $imagePath = $data['image']->store('notes_images', 'public');
+                unset($data['image']); //supprime l'objet UploadedFile
+                $data['image'] = $imagePath;
             }
 
+            // sauvegarde DB avec chemin du fichier et non l'objet fichier
             return $this->noteRepository->storeNote($data);
         } catch (Exception $e) {
             Log::error("Erreur dans NoteService storeNote(): " . $e->getMessage());

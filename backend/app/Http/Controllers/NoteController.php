@@ -166,8 +166,6 @@ class NoteController extends Controller
             // TODO : Remplacer par utilisateur connecté
             //$validated['user_id'] = $validated['user_id'] ?? 1;
 
-            $note = $this->noteService->storeNote($validated);
-
             return response()->json([
                 'message' => 'Note créée avec succès',
                 'note' => $note
