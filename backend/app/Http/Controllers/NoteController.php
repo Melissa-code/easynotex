@@ -16,7 +16,8 @@ class NoteController extends Controller
 {
     public function __construct(
         protected NoteService $noteService
-    ) {}
+    ) {
+    }
 
     /**
      * Get notes of a user order by updated_at
@@ -152,15 +153,15 @@ class NoteController extends Controller
     }
 
     /**
-     * STORE note 
-     * 
+     * STORE note
+     *
      * @param Request $request
      * @return JsonResponse
      */
     public function storeNote(StoreNoteRequest $request): JsonResponse
     {
         try {
-            $validated = $request->validated();  
+            $validated = $request->validated();
             $note = $this->noteService->storeNote($validated);
 
             // TODO : Remplacer par utilisateur connecté

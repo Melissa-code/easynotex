@@ -274,6 +274,9 @@ class NoteControllerTest extends TestCase
         $response->assertJson(['error' => 'ID note invalide']);
     }
 
+
+    
+
     /**
      * Create 3 notes for a user 
      * return $arrayNotes[]

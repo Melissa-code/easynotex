@@ -66,7 +66,7 @@ class NoteService
             throw $e;
         }
     }
-    
+
     /**
      * DELETE note by ID of the logged user
      *
@@ -84,10 +84,10 @@ class NoteService
         }
     }
 
-     
+
     /**
-     * CREATE note 
-     * 
+     * CREATE note
+     *
      * @param array $data
      * @throws Exception
      */
@@ -95,7 +95,7 @@ class NoteService
     {
         try {
             if (isset($data['image'])) {
-                // sauvegarde physiquement le fichier image sur le disque(public) dans le dossier 
+                // sauvegarde physiquement le fichier image sur le disque(public) dans le dossier
                 $imagePath = $data['image']->store('notes_images', 'public');
                 unset($data['image']); //supprime l'objet UploadedFile
                 $data['image'] = $imagePath;

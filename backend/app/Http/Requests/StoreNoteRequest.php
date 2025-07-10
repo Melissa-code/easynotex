@@ -13,9 +13,9 @@ class StoreNoteRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // TODO: changer à la connexion user 
-        //return false; 
-        return true; 
+        // TODO: changer à la connexion user
+        //return false;
+        return true;
     }
 
     /**
@@ -27,7 +27,7 @@ class StoreNoteRequest extends FormRequest
     {
         return [
             // lettres, chiffres, espace,-_,.;:()!?'" (le u à lafin: support UTF-8indispensable pour les accents)
-            'title' => 'required|string|min:3|max:150|regex:/^[\pL\pN\s\-_,\.;:()!?\'"]+$/u', 
+            'title' => 'required|string|min:3|max:150|regex:/^[\pL\pN\s\-_,\.;:()!?\'"]+$/u',
             'content' => 'required|string|min:2|max:255|regex:/^[\pL\pN\s\-_,\.;:()!?\'"]+$/u',
             'isFavorite' => 'nullable|boolean',
             'image' => 'nullable|image|max:2048', // img max 2 Mo (2048Ko)
@@ -37,7 +37,7 @@ class StoreNoteRequest extends FormRequest
     }
 
     /**
-     * Message error 
+     * Message error
      */
     public function messages(): array
     {
