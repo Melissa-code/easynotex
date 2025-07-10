@@ -7,6 +7,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Note;
 use App\Models\User;
 use App\Models\Category;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+
 
 class NoteControllerTest extends TestCase
 {
@@ -256,6 +259,8 @@ class NoteControllerTest extends TestCase
      */
     public function testFailedDeleteNoteByInvalidId(): void
     {
+        Storage::fake('public');
+
         $user = User::factory()->create();
         $category = Category::factory()->create();
         $notes = $this->notesFactory($user, $category);
@@ -275,7 +280,40 @@ class NoteControllerTest extends TestCase
     }
 
 
-    
+    public function testStoreNote(): void{
+        $user = User::factory()->create();
+        $category = Category::factory()->create();
+
+        $note = [
+            'title' => 'Note de test 1',
+            'content' => 'Contenu de la note de test 1', 
+            'isFavorite' => false,
+            'image' => UploadedFile::fake()->image('testimage.jpg'),
+            'created_at' => '2025-07-10 17:18:00',
+            'updated_at' => '2025-07-10 17:18:00',
+            'category_id' => $category->id, 
+            'user_id' => $user->id,
+        ];
+
+        // TODO: $this->actingAs($user)
+        $response = $this->postJson('/api/notes/store_note', $note);
+        $response->assertStatus(201)
+            ->assertJsonFragment ([
+                'title' => 'Note de test 1',
+                'content' => 'Contenu de la note de test 1',
+                'isFavorite' => false,
+            ]);
+
+        $this->assertDatabaseHas ('notes', [
+            'title' => 'Note de test 1',
+            'category_id' => $category->id,
+            'user_id' => $user->id,
+        ]);
+
+        $this->assertTrue (
+            Storage::disk('public')->exists('notes_images/' . $note['image']->hashName())
+        );
+    }
 
     /**
      * Create 3 notes for a user 
