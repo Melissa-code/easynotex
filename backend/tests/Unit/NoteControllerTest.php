@@ -279,7 +279,13 @@ class NoteControllerTest extends TestCase
         $response->assertJson(['error' => 'ID note invalide']);
     }
 
-
+    /**
+     * Test store note (create a note with an image file) 
+     * 
+     * This test verifies that a note can be successfully created via the API
+     * including uploading an image file & checks that the note is stored in the DB
+     * with the correct attributes and that the image is saved to the storage disk
+     */
     public function testStoreNote(): void{
         $user = User::factory()->create();
         $category = Category::factory()->create();
@@ -287,7 +293,7 @@ class NoteControllerTest extends TestCase
         $note = [
             'title' => 'Note de test 1',
             'content' => 'Contenu de la note de test 1', 
-            'isFavorite' => false,
+            'isFavorite' => 0,
             'image' => UploadedFile::fake()->image('testimage.jpg'),
             'created_at' => '2025-07-10 17:18:00',
             'updated_at' => '2025-07-10 17:18:00',
@@ -295,13 +301,12 @@ class NoteControllerTest extends TestCase
             'user_id' => $user->id,
         ];
 
-        // TODO: $this->actingAs($user)
-        $response = $this->postJson('/api/notes/store_note', $note);
+        $response = $this->actingAs($user)->postJson('/api/notes/store_note', $note);
         $response->assertStatus(201)
             ->assertJsonFragment ([
                 'title' => 'Note de test 1',
                 'content' => 'Contenu de la note de test 1',
-                'isFavorite' => false,
+                'isFavorite' => 0,
             ]);
 
         $this->assertDatabaseHas ('notes', [
@@ -313,6 +318,319 @@ class NoteControllerTest extends TestCase
         $this->assertTrue (
             Storage::disk('public')->exists('notes_images/' . $note['image']->hashName())
         );
+    }
+
+    /**
+     * Test store note (create a note without an image file) 
+     */
+    public function testStoreNoteWithoutImage(): void
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->create();
+
+        $note = [
+            'title' => 'Note de test sans img',
+            'content' => 'Contenu de la Note de test sans img', 
+            'isFavorite' => 0,
+            'category_id' => $category->id, 
+            'user_id' => $user->id,
+        ];
+
+        $response = $this->postJson('/api/notes/store_note', $note);
+        $response->assertStatus(201)
+            ->assertJsonFragment ([
+                'title' => 'Note de test sans img',
+                'content' => 'Contenu de la Note de test sans img',
+                'isFavorite' => 0,
+            ]);
+
+        $this->assertDatabaseHas ('notes', [
+            'title' => 'Note de test sans img',
+            'category_id' => $category->id,
+            'user_id' => $user->id,
+            'image' => null,
+        ]);
+    }
+
+    /**
+     * Test store note with invalid image format
+     * 
+     * This test verifies that an error is returned when trying to upload a file
+     * that is not an image (ex: a text file) and checks that the note is not stored in the DB
+     * and no image is saved to the storage disk          
+    */
+    public function testStoreNoteWithInvalidFormatImage(): void
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->create();
+
+        $note = [
+            'title' => 'Note de test avec format image invalide',
+            'content' => 'Contenu de la note de test avec format image invalide',
+            'isFavorite' => 0,
+            'image' => UploadedFile::fake()->create('testfile.txt', 100), // txt file
+            'category_id' => $category->id, 
+            'user_id' => $user->id,
+        ];
+
+        $response = $this->postJson('/api/notes/store_note', $note);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['image']);
+
+        $this->assertDatabaseMissing('notes', [
+            'title' => 'Note de test avec format image invalide',
+            'category_id' => $category->id,
+            'user_id' => $user->id,
+        ]);
+    }
+
+    public function testStoreNoteWithImageTooLarge(): void
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->create();
+
+        $note = [
+            'title' => 'Note avec image trop grande',
+            'content' => 'Contenu de la note',
+            'image' => UploadedFile::fake()->image('large_image.jpg')->size(5000), // 5MB
+            'category_id' => $category->id,
+            'user_id' => $user->id,
+        ];
+
+        $this->actingAs($user);
+        $response = $this->postJson('/api/notes/store_note', $note);
+        
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['image']);
+    }
+
+    public function testStoreNoteWithValidationErrors(): void
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->create();
+       
+        $note = [
+            // no title
+            'content' => 'Contenu sans titre',
+            'category_id' => 999, // category does not exist
+        ];
+
+        $this->actingAs($user);
+        $response = $this->postJson('/api/notes/store_note', $note);
+        
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['title', 'category_id']);
+    }
+
+    /**
+     * Test store note with empty title
+     */
+    public function testStoreNoteWithEmptyTitle(): void
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->create();
+
+        $note = [
+            'title' => '',
+            'content' => 'Contenu de la note',
+            'category_id' => $category->id,
+            'user_id' => $user->id,
+        ];
+
+        $this->actingAs($user);
+        $response = $this->postJson('/api/notes/store_note', $note);
+        
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['title']);
+    }
+
+    /**
+     * Test store note with title too long
+     */
+    public function testStoreNoteWithTitleTooLong(): void
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->create();
+
+        $note = [
+            'title' => str_repeat('A', 256), //title 256 chars
+            'content' => 'Contenu de la note',
+            'category_id' => $category->id,
+            'user_id' => $user->id,
+        ];
+
+        $this->actingAs($user);
+        $response = $this->postJson('/api/notes/store_note', $note);
+        
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['title']);
+    }
+
+    /**
+     * Test store note with favorite flag
+     */
+    public function testStoreNoteWithFavorite(): void
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->create();
+
+        $note = [
+            'title' => 'Note favorite',
+            'content' => 'Contenu de la note favorite',
+            'isFavorite' => 1,
+            'category_id' => $category->id,
+            'user_id' => $user->id,
+        ];
+
+        $this->actingAs($user);
+        $response = $this->postJson('/api/notes/store_note', $note);
+        
+        $response->assertStatus(201)
+            ->assertJsonFragment([
+                'isFavorite' => 1,
+            ]);
+
+        $this->assertDatabaseHas('notes', [
+            'title' => 'Note favorite',
+            'isFavorite' => 1,
+        ]);
+    }
+
+    /**
+     * Test store note with storage failure
+     */
+    public function testStoreNoteWithStorageFailure(): void
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->create();
+
+        // Désactiver le storage fake pour simuler une erreur
+        Storage::shouldReceive('disk')
+            ->with('public')
+            ->andThrow(new \Exception('Erreur de stockage'));
+
+        $note = [
+            'title' => 'Note avec erreur storage',
+            'content' => 'Contenu de la note',
+            'image' => UploadedFile::fake()->image('test.jpg'),
+            'category_id' => $category->id,
+            'user_id' => $user->id,
+        ];
+
+        $this->actingAs($user);
+        $response = $this->postJson('/api/notes/store_note', $note);
+        
+        $response->assertStatus(500);
+    }
+
+     /**
+     * Test store note with missing category
+     */
+    public function testStoreNoteWithMissingCategory(): void
+    {
+        $user = User::factory()->create();
+
+        $note = [
+            'title' => 'Note sans catégorie',
+            'content' => 'Contenu de la note',
+            'category_id' => 999, // ID does not exist
+            'isFavorite' => 0,              
+            'user_id' => $user->id,
+        ];
+
+        $this->actingAs($user);
+        $response = $this->postJson('/api/notes/store_note', $note);
+        
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['category_id']);
+    }
+
+    /**
+     * Test store note with forbidden special characters
+     */
+    public function testStoreNoteWithForbiddenSpecialCharacters(): void
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->create();
+
+        $note = [
+            'title' => 'Note avec caractères interdits',
+            'content' => 'Contenu avec émojis 🎉 et caractères spéciaux <>"\&',
+            'category_id' => $category->id,
+            'user_id' => $user->id,
+        ];
+
+        $this->actingAs($user);
+        $response = $this->postJson('/api/notes/store_note', $note);
+        
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['content'])
+            ->assertJsonFragment([
+                'message' => 'Erreur de validation',
+                'errors' => [
+                    'content' => [
+                        'Le contenu contient des caractères non autorisés.'
+                    ]
+                ]
+            ]);
+    }
+
+    /**
+     * Test store note response structure 
+     */
+    public function testStoreNoteResponseStructureAlternative(): void
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->create();
+
+        $note = [
+            'title' => 'Test structure réponse',
+            'content' => 'Contenu pour tester la structure',
+            'category_id' => $category->id,
+            'user_id' => $user->id,
+        ];
+
+        $this->actingAs($user);
+        $response = $this->postJson('/api/notes/store_note', $note);
+        $response->assertStatus(201);
+        $response->assertJsonStructure([
+            'message',
+            'note' => [
+                'id',
+                'title',
+                'content',
+                'isFavorite',
+                'image',
+                'category_id',
+                'user_id',
+                'created_at',
+                'updated_at'
+            ]
+        ]);
+    }
+
+    public function testStoreNoteRejectsHtmlContent(): void
+    {
+        $user = User::factory()->create();
+        $category = Category::factory()->create();
+
+        $note = [
+            'title' => 'Note avec HTML',
+            'content' => '<p>Contenu avec <strong>HTML</strong></p>',
+            'category_id' => $category->id,
+            'user_id' => $user->id,
+        ];
+
+        $this->actingAs($user);
+        $response = $this->postJson('/api/notes/store_note', $note);
+        
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['content']);
+        $response->assertJson([
+            'errors' => [
+                'content' => ['Le contenu contient des caractères non autorisés.']
+            ]
+        ]);
     }
 
     /**

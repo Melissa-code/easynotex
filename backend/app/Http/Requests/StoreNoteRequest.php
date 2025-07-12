@@ -31,8 +31,8 @@ class StoreNoteRequest extends FormRequest
             'content' => 'required|string|min:2|max:255|regex:/^[\pL\pN\s\-_,\.;:()!?\'"]+$/u',
             'isFavorite' => 'nullable|boolean',
             'image' => 'nullable|image|max:2048', // img max 2 Mo (2048Ko)
-            'category_id' => 'required|integer',
-            'user_id' => 'required|integer'
+            'category_id' => 'required|integer|exists:categories,id',
+            'user_id' => 'required|integer|exists:users,id',
         ];
     }
 

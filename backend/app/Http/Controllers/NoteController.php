@@ -169,7 +169,17 @@ class NoteController extends Controller
 
             return response()->json([
                 'message' => 'Note créée avec succès',
-                'note' => $note
+                'note' => [
+                    'id' => $note->id,
+                    'title' => $note->title,
+                    'content' => $note->content,
+                    'isFavorite' => $note->isFavorite ?? 0,
+                    'image' => $note->image ?? null,
+                    'category_id' => $note->category_id,
+                    'user_id' => $note->user_id,
+                    'created_at' => $note->created_at,
+                    'updated_at' => $note->updated_at,
+                ]
             ], 201);
         } catch (Exception $e) {
             Log::error("Erreur inconnue dans storeNote() du contrôleur", [
