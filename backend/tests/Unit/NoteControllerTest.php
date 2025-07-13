@@ -322,6 +322,9 @@ class NoteControllerTest extends TestCase
 
     /**
      * Test store note (create a note without an image file) 
+     * 
+     * This test verifies that a note can be successfully created via the API
+     * without uploading an image file & checks that the note is stored in the DB
      */
     public function testStoreNoteWithoutImage(): void
     {
@@ -336,7 +339,8 @@ class NoteControllerTest extends TestCase
             'user_id' => $user->id,
         ];
 
-        $response = $this->postJson('/api/notes/store_note', $note);
+        $response = $this->actingAs($user)->postJson('/api/notes/store_note', $note);
+        
         $response->assertStatus(201)
             ->assertJsonFragment ([
                 'title' => 'Note de test sans img',
@@ -373,7 +377,8 @@ class NoteControllerTest extends TestCase
             'user_id' => $user->id,
         ];
 
-        $response = $this->postJson('/api/notes/store_note', $note);
+        $response = $this->actingAs($user)->postJson('/api/notes/store_note', $note);
+        
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['image']);
 
@@ -384,6 +389,12 @@ class NoteControllerTest extends TestCase
         ]);
     }
 
+    /**
+     * Test store note with image too large
+     * 
+     * This test verifies that an error is returned when trying to upload an image
+     * that exceeds the maximum allowed size (5MB)   
+     */
     public function testStoreNoteWithImageTooLarge(): void
     {
         $user = User::factory()->create();
@@ -397,17 +408,21 @@ class NoteControllerTest extends TestCase
             'user_id' => $user->id,
         ];
 
-        $this->actingAs($user);
-        $response = $this->postJson('/api/notes/store_note', $note);
+        $response = $this->actingAs($user)->postJson('/api/notes/store_note', $note);
         
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['image']);
     }
 
+    /**
+     * Test store note with validation errors
+     * 
+     * This test verifies that the API correctly handles validation errors
+     * when required fields are missing or invalid 
+     */
     public function testStoreNoteWithValidationErrors(): void
     {
         $user = User::factory()->create();
-        $category = Category::factory()->create();
        
         $note = [
             // no title
@@ -415,8 +430,7 @@ class NoteControllerTest extends TestCase
             'category_id' => 999, // category does not exist
         ];
 
-        $this->actingAs($user);
-        $response = $this->postJson('/api/notes/store_note', $note);
+        $response = $this->actingAs($user)->postJson('/api/notes/store_note', $note);
         
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['title', 'category_id']);
@@ -424,6 +438,9 @@ class NoteControllerTest extends TestCase
 
     /**
      * Test store note with empty title
+     * 
+     * This test verifies that the API returns a validation error
+     * when trying to create a note with an empty title
      */
     public function testStoreNoteWithEmptyTitle(): void
     {
@@ -437,15 +454,17 @@ class NoteControllerTest extends TestCase
             'user_id' => $user->id,
         ];
 
-        $this->actingAs($user);
-        $response = $this->postJson('/api/notes/store_note', $note);
+        $response = $this->actingAs($user)->postJson('/api/notes/store_note', $note);
         
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['title']);
     }
 
     /**
-     * Test store note with title too long
+     * Test store note with a title too long
+     * 
+     * This test verifies that the API returns a validation error
+     * when trying to create a note with a title that exceeds the maximum length
      */
     public function testStoreNoteWithTitleTooLong(): void
     {
@@ -459,8 +478,7 @@ class NoteControllerTest extends TestCase
             'user_id' => $user->id,
         ];
 
-        $this->actingAs($user);
-        $response = $this->postJson('/api/notes/store_note', $note);
+        $response = $this->actingAs($user)->postJson('/api/notes/store_note', $note);
         
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['title']);
@@ -468,6 +486,9 @@ class NoteControllerTest extends TestCase
 
     /**
      * Test store note with favorite flag
+     * 
+     * This test verifies that a note can be created with the favorite flag set to true
+     * and checks that the note is stored in the DB with the correct favorite status
      */
     public function testStoreNoteWithFavorite(): void
     {
@@ -482,8 +503,7 @@ class NoteControllerTest extends TestCase
             'user_id' => $user->id,
         ];
 
-        $this->actingAs($user);
-        $response = $this->postJson('/api/notes/store_note', $note);
+        $response = $this->actingAs($user)->postJson('/api/notes/store_note', $note);
         
         $response->assertStatus(201)
             ->assertJsonFragment([
@@ -498,6 +518,9 @@ class NoteControllerTest extends TestCase
 
     /**
      * Test store note with storage failure
+     * 
+     * This test simulates a failure in the storage system
+     * and verifies that the API returns an appropriate error response
      */
     public function testStoreNoteWithStorageFailure(): void
     {
@@ -517,14 +540,16 @@ class NoteControllerTest extends TestCase
             'user_id' => $user->id,
         ];
 
-        $this->actingAs($user);
-        $response = $this->postJson('/api/notes/store_note', $note);
+        $response = $this->actingAs($user)->postJson('/api/notes/store_note', $note);
         
         $response->assertStatus(500);
     }
 
      /**
      * Test store note with missing category
+     * 
+     * This test verifies that the API returns a validation error
+     * when trying to create a note with a category that does not exist
      */
     public function testStoreNoteWithMissingCategory(): void
     {
@@ -538,8 +563,7 @@ class NoteControllerTest extends TestCase
             'user_id' => $user->id,
         ];
 
-        $this->actingAs($user);
-        $response = $this->postJson('/api/notes/store_note', $note);
+        $response = $this->actingAs($user)->postJson('/api/notes/store_note', $note);
         
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['category_id']);
@@ -547,6 +571,9 @@ class NoteControllerTest extends TestCase
 
     /**
      * Test store note with forbidden special characters
+     * 
+     * This test verifies that the API returns a validation error
+     * when trying to create a note with content that contains forbidden special characters
      */
     public function testStoreNoteWithForbiddenSpecialCharacters(): void
     {
@@ -560,8 +587,7 @@ class NoteControllerTest extends TestCase
             'user_id' => $user->id,
         ];
 
-        $this->actingAs($user);
-        $response = $this->postJson('/api/notes/store_note', $note);
+        $response = $this->actingAs($user)->postJson('/api/notes/store_note', $note);
         
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['content'])
@@ -577,6 +603,9 @@ class NoteControllerTest extends TestCase
 
     /**
      * Test store note response structure 
+     * 
+     * This test verifies that the API returns the correct JSON structure
+     * when a note is successfully created
      */
     public function testStoreNoteResponseStructureAlternative(): void
     {
@@ -590,9 +619,10 @@ class NoteControllerTest extends TestCase
             'user_id' => $user->id,
         ];
 
-        $this->actingAs($user);
-        $response = $this->postJson('/api/notes/store_note', $note);
+        $response = $this->actingAs($user)->postJson('/api/notes/store_note', $note);
+        
         $response->assertStatus(201);
+        
         $response->assertJsonStructure([
             'message',
             'note' => [
@@ -609,6 +639,12 @@ class NoteControllerTest extends TestCase
         ]);
     }
 
+    /**
+     * Test store note rejects HTML content
+     * 
+     * This test verifies that the API returns a validation error
+     * when trying to create a note with HTML content
+     */
     public function testStoreNoteRejectsHtmlContent(): void
     {
         $user = User::factory()->create();
@@ -621,11 +657,12 @@ class NoteControllerTest extends TestCase
             'user_id' => $user->id,
         ];
 
-        $this->actingAs($user);
-        $response = $this->postJson('/api/notes/store_note', $note);
+        $response = $this->actingAs($user)->postJson('/api/notes/store_note', $note);
         
         $response->assertStatus(422);
+        
         $response->assertJsonValidationErrors(['content']);
+        
         $response->assertJson([
             'errors' => [
                 'content' => ['Le contenu contient des caractères non autorisés.']
@@ -635,7 +672,9 @@ class NoteControllerTest extends TestCase
 
     /**
      * Create 3 notes for a user 
-     * return $arrayNotes[]
+     * 
+     * This method creates 3 notes for a given user and category
+     * and returns an array of created Note models
      */
     private function notesFactory($user, $category, $count = 3): array
     {
