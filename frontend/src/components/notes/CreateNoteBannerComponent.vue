@@ -17,10 +17,10 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
           <div class="col-span-1 md:col-span-1"></div>
           <div class="col-span-1 md:col-span-1 flex justify-center">
-            <!-- button create note -->
-            <button type="button" class="rounded-full">
+            <!-- Link to create note form -->
+            <RouterLink to="/note/create" class="btn-create-note rounded-full">
               Créer une nouvelle note
-            </button>
+            </RouterLink>
           </div>
           <div class="col-span-1 md:col-span-1"></div>
         </div>

@@ -98,7 +98,7 @@ h3 {
   font-weight: 600;
 }
 
-button, select {
+button, select, .btn-create-note {
   padding: 0.6em 1.2em;
   font-size: 1rem;
   font-weight: 500;
@@ -109,7 +109,7 @@ button, select {
   color: var(--white); 
 }
 
-button:hover, select:hover {
+button:hover, select:hover, .btn-create-note:hover {
   background-color: #4ECDC4; 
   color: var(--black); 
 }
