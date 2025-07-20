@@ -1,10 +1,11 @@
 <script>
-  import NotesListComponent from '../components/notes/NotesListComponent.vue'
-  import CategorySelectComponent from '../components/notes/CategorySelectComponent.vue'
-  import SearchBarComponent from '../components/notes/SearchBarComponent.vue'
-  import CreateNoteBannerComponent from '../components/notes/CreateNoteBannerComponent.vue'
-  import PaginationComponent from '../components/shared/PaginationComponent.vue'
-  import axios from 'axios'
+import NotesListComponent from '../components/notes/NotesListComponent.vue'
+import CategorySelectComponent from '../components/notes/CategorySelectComponent.vue'
+import SearchBarComponent from '../components/notes/SearchBarComponent.vue'
+import CreateNoteBannerComponent from '../components/notes/CreateNoteBannerComponent.vue'
+import PaginationComponent from '../components/shared/PaginationComponent.vue'
+import NotificationComponent from '../components/shared/NotificationComponent.vue'; 
+import axios from 'axios'
 
   export default {
       name: 'NotesView',
@@ -13,6 +14,7 @@
           CategorySelectComponent,
           SearchBarComponent, 
           CreateNoteBannerComponent, 
+          NotificationComponent,
           PaginationComponent,
       },
       data() {
@@ -48,7 +50,8 @@
           },
           handleCategorySelection(categoryId) {
               this.selectedCategory = categoryId;
-          }
+          },
+      
       },
       mounted() {
           this.fetchNotes();
@@ -57,21 +60,29 @@
 </script>
 
 <template>
-    <SearchBarComponent />
-    <CreateNoteBannerComponent />
-    <section class="py-4">
-        <div class="container mx-auto px-4">
-            <div class="pb-4 flex justify-end items-center">
-                <span class="mr-2">Trier par </span>
-                <button class="rounded-full mr-2" @click="toggleFavorites">
-                    {{ showFavorites ? "Récentes" : "Favoris" }}
-                </button>
-                <CategorySelectComponent @category-selected="handleCategorySelection" />
+    <div>
+        <SearchBarComponent />
+        <CreateNoteBannerComponent />
+        <section class="py-4">
+            <div class="container mx-auto px-4">
+                <div class="pb-4 flex justify-end items-center">
+                    <span class="mr-2">Trier par </span>
+                    <!-- récentes/favories -->
+                    <button class="rounded-full mr-2" @click="toggleFavorites">
+                        {{ showFavorites ? "Récentes" : "Favoris" }}
+                    </button>
+                    <!-- categories select element -->
+                    <CategorySelectComponent @category-selected="handleCategorySelection" />
+                </div>
+                <!-- notification success/error -->
+                <NotificationComponent />
+                <!-- notes list -->
+                <NotesListComponent :notes="filteredNotes" />
             </div>
-            <div class="message"></div>
-            
-            <NotesListComponent :notes="filteredNotes" />
-        </div>
-    </section>
-    <PaginationComponent /> 
+        </section>
+        
+        <section>
+            <PaginationComponent />
+        </section> 
+    </div>
 </template>

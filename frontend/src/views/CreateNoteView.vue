@@ -1,8 +1,10 @@
 <script>
 import { ref, computed } from 'vue';
+import { useNotificationStore } from '../stores/notifications.js';
 import axios from "axios";
 import { useRouter } from 'vue-router';
 import SpinnerComponent from '../components/shared/SpinnerComponent.vue'; 
+
 
 export default {
   name: "CreateNoteView",
@@ -12,6 +14,7 @@ export default {
   setup() {
     const isSubmitting = ref(false);
     const router = useRouter();
+    const notificationStore = useNotificationStore();
 
     const formData = ref({
       title: "",
@@ -128,7 +131,7 @@ export default {
 
         router.push('/');
         
-        alert('Note créée avec succès !');
+        notificationStore.setSuccess('Note créée avec succès !');
 
       } catch (error) {
         console.error('Error creating note:', error);
