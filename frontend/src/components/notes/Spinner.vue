@@ -1,12 +1,43 @@
 <script>
   export default {
     name: 'Spinner',
+    props: {
+      size: {
+        type: String,
+        default: '80px'
+      },
+      borderWidth: {
+        type: String,
+        default: '8px'
+      },
+      fullHeight: {
+        type: Boolean,
+        default: true
+      },
+      color: {
+        type: String,
+        default: '#FFE66D'
+      },
+      backgroundColor: {
+        type: String,
+        default: '#1A535C'
+      }
+    }
   };
 </script>
 
 <template>
   <div class="spinner">
-    <div class="loader"></div>
+    <div class="loader"
+      :style="{ 
+        width: size, 
+        height: size, 
+        borderWidth: borderWidth,
+        borderTopWidth: borderWidth,
+        borderColor: backgroundColor,
+        borderTopColor: color
+      }"
+    ></div>
   </div>
 </template>
 
@@ -15,6 +46,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.spinner.full-height {
   height: 33vh;
 }
 
@@ -22,8 +56,6 @@
   border: 8px solid #1A535C; 
   border-top: 8px solid #FFE66D;
   border-radius: 50%;
-  width: 80px;  
-  height: 80px; 
   animation: spin 1.5s linear infinite; 
 }
 

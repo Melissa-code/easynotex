@@ -2,10 +2,15 @@
 import { ref, computed } from 'vue';
 import axios from "axios";
 import { useRouter } from 'vue-router';
+import Spinner from '../components/notes/Spinner.vue'; 
 
 export default {
   name: "CreateNoteView",
+  components: {
+    Spinner
+  },    
   setup() {
+    const isSubmitting = ref(false);
     const router = useRouter();
 
     const formData = ref({
@@ -83,6 +88,9 @@ export default {
         errorMessage.value = 'Le contenu doit faire au moins 3 caractères et moins de 5000 caractères.';
         return;
       }
+
+      if (isSubmitting.value) return; // avoid multiple submissions
+      isSubmitting.value = true;
       
       errorMessage.value = ''; 
 
@@ -129,10 +137,12 @@ export default {
         } else {
           errorMessage.value = 'Erreur de connexion. Vérifiez que votre serveur est démarré.';
         }
+      } finally {
+        isSubmitting.value = false; // Reset submitting state
       }
     }
 
-    return { formData, errorMessage, handleFileUpload, submitForm, isFormValid };
+    return { formData, errorMessage, handleFileUpload, submitForm, isFormValid, isSubmitting };
   }
 };
 </script>
@@ -239,11 +249,23 @@ export default {
               @click="$router.push('/')">
               Retour
             </button>
-            <button 
+           <button 
               type="submit"
-              class="btn-create-note rounded-full"
-              >
-              Ajouter
+              :disabled="isSubmitting"
+              :class="{ 'opacity-100 cursor-not-allowed': isSubmitting }"
+              class="btn-create-note rounded-full flex items-center justify-center "
+            >      
+              <span class="flex items-center gap-2">
+               <Spinner 
+                  v-if="isSubmitting" 
+                  size="16px" 
+                  border-width="2px" 
+                  :full-height="false"
+                  color="#F7FFF7"
+                  background-color="#FFE66D"
+                />
+                {{ isSubmitting ? 'Ajout'  : 'Ajouter' }}
+              </span>
             </button>
           </div>
       </form>
@@ -253,11 +275,5 @@ export default {
 
 
 <style scoped>
-
-.custom-checkbox {
-  accent-color: var(--light-green);
-  border: 2px solid var(--light-green) !important;
-  border-radius: 4px;
-}
 
 </style>
