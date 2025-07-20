@@ -1,27 +1,20 @@
 <script setup>
   import NavBarComponent from './components/layout/NavBarComponent.vue';
-  import NotesView from './views/NotesView.vue';
   import FooterComponent from './components/layout/FooterComponent.vue';
-  
-  import SearchBarComponent from './components/notes/SearchBarComponent.vue';
-  import CreateNoteBannerComponent from './components/notes/CreateNoteBannerComponent.vue';
-  import PaginationComponent from './components/shared/PaginationComponent.vue';
-
-  import NoteView from './views/NoteView.vue';
 </script>
 
 <template>
-  <div>
+  <div class="">
     <!-- navigation -->
-    <header>
+    <header class="">
       <NavBarComponent />
     </header>
 
-    <main>
+    <main class="">
       <RouterView />
     </main>
 
-    <footer>
+    <footer class="">
       <FooterComponent />
     </footer>
   </div>

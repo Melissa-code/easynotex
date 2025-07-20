@@ -61,17 +61,19 @@ import axios from 'axios'
 
 <template>
     <div>
+        <!-- search a note -->
         <SearchBarComponent />
+        <!-- link to create a new note -->
         <CreateNoteBannerComponent />
         <section class="py-4">
             <div class="container mx-auto px-4">
                 <div class="pb-4 flex justify-end items-center">
                     <span class="mr-2">Trier par </span>
-                    <!-- récentes/favories -->
+                    <!-- sort by favorites (button) -->
                     <button class="rounded-full mr-2" @click="toggleFavorites">
                         {{ showFavorites ? "Récentes" : "Favoris" }}
                     </button>
-                    <!-- categories select element -->
+                    <!-- sort by category (select) -->
                     <CategorySelectComponent @category-selected="handleCategorySelection" />
                 </div>
                 <!-- notification success/error -->

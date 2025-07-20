@@ -24,6 +24,7 @@ export default {
       isFavorite: false,
     });
 
+    const isOpen = ref(false)// if select is open 
     const isFormValid = computed(() => {
     const title = formData.value.title.trim();
     const content = formData.value.content.trim();
@@ -145,15 +146,15 @@ export default {
       }
     }
 
-    return { formData, errorMessage, handleFileUpload, submitForm, isFormValid, isSubmitting };
+    return { formData, errorMessage, handleFileUpload, submitForm, isFormValid, isSubmitting,  isOpen };
   }
 };
 </script>
   
 <template>
-  <div class="flex justify-center items-center min-h-screen bg-[--yellow-light]">
-    <div class="w-full max-w-xl bg-[--yellow] border border-[--dark-green] rounded-2xl mx-8">
+  <div class="h-screen flex items-center justify-center bg-[--yellow-light]">
 
+    <div class="w-full max-w-xl max-h-full bg-[--yellow] border border-[--dark-green] rounded-2xl flex flex-col overflow-hidden">
       <!-- Title h1 -->
       <div class="bg-[--yellow]  border-b border-[--dark-green]">
         <h1 class="text-2xl font-bold text-center text-[--dark-green]">
@@ -162,7 +163,7 @@ export default {
       </div>
 
       <!-- Form -->
-        <form @submit.prevent="submitForm" class="space-y-4 bg-white p-6 rounded-b-2xl">
+        <form @submit.prevent="submitForm" class="space-y-4 bg-white p-6 rounded-b-2xl flex-1 overflow-y-auto">
           <!-- Title note -->
           <div class="flex items-center border-b border-[--light-green] py-2">
             <input 
@@ -179,13 +180,15 @@ export default {
             <select
               required
               v-model="formData.category"
+              @click="isOpen = !isOpen"
               class="appearance-none bg-transparent border-none w-full text-[#7A7A7A] py-1 px-2 leading-tight focus:outline-none focus:bg-[#4ECDC4] focus:text-[#7A7A7A] transition-colors duration-200">
               <option value="" class="bg-[#4ECDC4] focus:text-[#7A7A7A]">Sélectionner une catégorie *</option>
               <option value="1" class="bg-[#4ECDC4] focus:text-[#7A7A7A]">Note personnelle *</option>
               <option value="3" class="bg-[#4ECDC4] focus:text-[#7A7A7A]">Finances-Administratif *</option>
             </select>
             <!-- Arrow icon -->
-            <div class="pointer-events-none absolute right-2 text-[#7A7A7A] group-focus-within:text-white">
+            <div class="pointer-events-none absolute right-2 text-[#7A7A7A] transition-transform duration-300"
+              :class="{ 'rotate-180': isOpen }">
               <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                 <path d="M5.516 7.548L10 12.032l4.484-4.484-1.06-1.06L10 9.91 6.576 6.488z" />
               </svg>
@@ -275,8 +278,3 @@ export default {
     </div>
   </div>
 </template>
-
-
-<style scoped>
-
-</style>
