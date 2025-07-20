@@ -151,7 +151,7 @@ export default {
 
                     <li class="flex white gap-1">
                         <!-- Back to list -->
-                        <button type="button" class="rounded-full">
+                        <button type="button" class="rounded-full btn-back">
                             <Router-link to="/">
                                 <span class="text-white">Retour</span>
                             </Router-link>

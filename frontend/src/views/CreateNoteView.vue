@@ -1,5 +1,5 @@
 <script>
-import { ref } from 'vue'
+import { ref, computed } from 'vue';
 import axios from "axios";
 import { useRouter } from 'vue-router';
 
@@ -7,7 +7,7 @@ export default {
   name: "CreateNoteView",
   setup() {
     const router = useRouter();
-    
+
     const formData = ref({
       title: "",
       category: "",
@@ -16,13 +16,25 @@ export default {
       isFavorite: false,
     });
 
+    const isFormValid = computed(() => {
+    const title = formData.value.title.trim();
+    const content = formData.value.content.trim();
+    const category = formData.value.category;
+    // Regex : accents français et lettres Unicode
+    const validCharsRegex = /^[\p{L}\p{N}\s\-_.,!?'"():;]+$/u;
+
+    return title.length >= 2 && 
+      title.length <= 100 &&
+      validCharsRegex.test(title) &&
+      category !== '' && 
+      content.length >= 3 &&
+      content.length <= 5000 &&
+      validCharsRegex.test(content);
+    });
+
     const errorMessage = ref('')
 
-    /**
-     * Handle file upload and validate image type
-     * @param {Event} event - The change event from the file input
-     * @returns {void}
-     */ 
+    // Handle file upload and validate image type
     const handleFileUpload = (event) => {
       const file = event.target.files[0];
 
@@ -39,29 +51,47 @@ export default {
       }
     };
 
-    /**
-     * Handle form submission
-     * Prevent default form submission and validate required fields
-     * @param event - The submit event from the form
-     * @returns {void}
-     */
+    //Prevent default form submission and validate required fields
     const submitForm = async (event) => {
       event.preventDefault();
 
       // Validate required fields
-      if (!formData.value.title || !formData.value.category || !formData.value.content) {
-        errorMessage.value = 'Veuillez remplir tous les champs obligatoires (titre, catégorie, contenu).';
+      const title = formData.value.title.trim();
+      const content = formData.value.content.trim();
+      const validCharsRegex = /^[\p{L}\p{N}\s\-_.,!?'"():;]+$/u;
 
+      if (!validCharsRegex.test(title)) {
+        errorMessage.value = 'Le titre contient des caractères non autorisés.';
         return;
       }
+      if (!validCharsRegex.test(content)) {
+        errorMessage.value = 'Le contenu contient des caractères non autorisés.';
+        return;
+      }
+
+      if (!title || !formData.value.category || !content) {
+        errorMessage.value = 'Veuillez remplir les 3 champs obligatoires.';
+        return;
+      }
+
+      if (title.length < 2 || title.length > 100) {
+        errorMessage.value = 'Le titre doit faire au moins 2 caractères et moins de 100 caractères.';
+        return;
+      }
+
+      if (content.length < 3 || content.length > 5000) {
+        errorMessage.value = 'Le contenu doit faire au moins 3 caractères et moins de 5000 caractères.';
+        return;
+      }
+      
       errorMessage.value = ''; 
 
       try {
         // Create a new FormData object
         const dataToSend = new FormData()
-        dataToSend.append('title', formData.value.title);
+        dataToSend.append('title', title);
         dataToSend.append('category_id', parseInt(formData.value.category));   
-        dataToSend.append('content', formData.value.content);
+        dataToSend.append('content', content);
         dataToSend.append('isFavorite', formData.value.isFavorite ? 1 : 0);
         if (formData.value.image) {
           dataToSend.append('image', formData.value.image);
@@ -100,22 +130,9 @@ export default {
           errorMessage.value = 'Erreur de connexion. Vérifiez que votre serveur est démarré.';
         }
       }
-
-      const goBack = () => {
-      console.log('Retour')
     }
 
-    return { 
-      formData, 
-      errorMessage, 
-      handleFileUpload,
-      submitForm,
-      goBack
-     };
-      
-    };
-
-    return { formData, errorMessage, handleFileUpload, submitForm };
+    return { formData, errorMessage, handleFileUpload, submitForm, isFormValid };
   }
 };
 </script>
@@ -134,18 +151,20 @@ export default {
       <!-- Form -->
         <form @submit.prevent="submitForm" class="space-y-4 bg-white p-6 rounded-b-2xl">
           <!-- Title note -->
-          <div class="flex items-center border-b border-teal-500 py-2">
+          <div class="flex items-center border-b border-[--light-green] py-2">
             <input 
               type="text" 
               placeholder="TITRE DE LA NOTE *" 
               aria-label="title_note" 
               v-model="formData.title"
               class="appearance-none bg-transparent border-none w-full placeholder-[#7A7A7A] mr-3 py-1 px-2 leading-tight focus:outline-none" 
+              required
             />
           </div>
           <!-- Category -->
-          <div class="relative flex items-center border-b border-teal-500 py-2">
+          <div class="relative flex items-center border-b border-[--light-green] py-2">
             <select
+              required
               v-model="formData.category"
               class="appearance-none bg-transparent border-none w-full text-[#7A7A7A] py-1 px-2 leading-tight focus:outline-none focus:bg-[#4ECDC4] focus:text-[#7A7A7A] transition-colors duration-200">
               <option value="" class="bg-[#4ECDC4] focus:text-[#7A7A7A]">Sélectionner une catégorie *</option>
@@ -161,8 +180,9 @@ export default {
           </div>
           <!-- Content -->
           <div class="mb-2">
-            <div class="flex items-center border-b border-teal-500 py-2">
+            <div class="flex items-center border-b border-[--light-green] py-2">
               <textarea 
+                required
                 placeholder="Contenu de la note *" 
                 aria-label="content_note" 
                 rows="1"
@@ -173,7 +193,7 @@ export default {
             <small class="text-xs text-[--light-green] mt-1 ml-2">Appuyez sur Entrée pour ajouter une ligne</small>
           </div>
           <!-- Upload image -->
-          <div class="flex items-center border-b border-teal-500 py-2 relative">
+          <div class="flex items-center border-b border-[--light-green] py-2 relative">
             <input 
               type="file" 
               id="image_upload" 
@@ -194,7 +214,7 @@ export default {
             <input 
               type="checkbox" 
               id="is_favorite" 
-              class="mr-2" 
+              class="mr-2 cursor-pointer accent-[--light-green] focus:ring-[--dark-green] focus:ring-opacity-50" 
               v-model="formData.isFavorite"
               aria-label="is_favorite"
             />
@@ -203,25 +223,26 @@ export default {
 
           <!-- Required fields note -->
           <div>
-            <small>* Champs obligatoires</small>
+            <small class="text-[--light-green]">* Champs obligatoires</small>
           </div>
 
           <!-- Error message -->
           <div v-if="errorMessage" class="text-red-500 text-sm mt-2">
-            <small class="text-red-500">Erreur : Veuillez remplir tous les champs requis.</small>
+            <p class="text-red-500 font-bold">ERREUR : {{ errorMessage }}</p>
           </div>
 
           <!-- Buttons : back & submit -->
           <div class="flex justify-center gap-4 pt-4">
             <button 
               type="button"
-              class="bg-[--light-green] text-[--black] hover:bg-[--dark-green] hover:text-[--white] font-medium py-2 px-4 rounded-full"
+              class="bg-[--light-green] text-[--black] hover:bg-[--dark-green] hover:text-[--white] font-medium py-2 px-4 rounded-full btn-back"
               @click="$router.push('/')">
               Retour
             </button>
             <button 
               type="submit"
-              class="btn-create-note rounded-full">
+              class="btn-create-note rounded-full"
+              >
               Ajouter
             </button>
           </div>
@@ -229,3 +250,14 @@ export default {
     </div>
   </div>
 </template>
+
+
+<style scoped>
+
+.custom-checkbox {
+  accent-color: var(--light-green);
+  border: 2px solid var(--light-green) !important;
+  border-radius: 4px;
+}
+
+</style>

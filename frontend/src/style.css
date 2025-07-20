@@ -109,6 +109,10 @@ button, select, .btn-create-note {
   color: var(--white); 
 }
 
+.btn-create-note, .btn-back {
+  min-width: 100px
+}
+
 button:hover, select:hover, .btn-create-note:hover {
   background-color: #4ECDC4; 
   color: var(--black); 
