@@ -1,6 +1,6 @@
 <script>
 import NoteCardComponent from './NoteCardComponent.vue';
-import Spinner from './Spinner.vue';
+import SpinnerComponent from '../shared/SpinnerComponent.vue';
 
 export default {
     name: 'NotesListComponent',
@@ -18,7 +18,7 @@ export default {
     },
     components: {
         NoteCardComponent,
-        Spinner,
+        SpinnerComponent,
     },
     watch: {
         notes: {
@@ -38,7 +38,7 @@ export default {
     <div class="mx-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 my-10">
         <!-- spinner -->
         <div v-if="loading" class="col-span-1 flex justify-center items-center">
-            <Spinner /> 
+            <SpinnerComponent /> 
         </div>
 
         <!-- No note found -->

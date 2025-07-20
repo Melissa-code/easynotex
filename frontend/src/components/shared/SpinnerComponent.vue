@@ -1,6 +1,6 @@
 <script>
   export default {
-    name: 'Spinner',
+    name: 'SpinnerComponent',
     props: {
       size: {
         type: String,

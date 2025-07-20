@@ -68,6 +68,8 @@
                 </button>
                 <CategorySelectComponent @category-selected="handleCategorySelection" />
             </div>
+            <div class="message"></div>
+            
             <NotesListComponent :notes="filteredNotes" />
         </div>
     </section>

@@ -2,12 +2,12 @@
 import { ref, computed } from 'vue';
 import axios from "axios";
 import { useRouter } from 'vue-router';
-import Spinner from '../components/notes/Spinner.vue'; 
+import SpinnerComponent from '../components/shared/SpinnerComponent.vue'; 
 
 export default {
   name: "CreateNoteView",
   components: {
-    Spinner
+    SpinnerComponent
   },    
   setup() {
     const isSubmitting = ref(false);
@@ -231,12 +231,12 @@ export default {
             <label for="is_favorite" class=" text-[#7A7A7A]">Marquer comme favori</label>
           </div>
 
-          <!-- Required fields note -->
+          <!-- Required fields note indication -->
           <div>
             <small class="text-[--light-green]">* Champs obligatoires</small>
           </div>
 
-          <!-- Error message -->
+          <!-- Error messages -->
           <div v-if="errorMessage" class="text-red-500 text-sm mt-2">
             <p class="text-red-500 font-bold">ERREUR : {{ errorMessage }}</p>
           </div>
@@ -249,14 +249,14 @@ export default {
               @click="$router.push('/')">
               Retour
             </button>
-           <button 
+            <button 
               type="submit"
               :disabled="isSubmitting"
               :class="{ 'opacity-100 cursor-not-allowed': isSubmitting }"
               class="btn-create-note rounded-full flex items-center justify-center "
             >      
               <span class="flex items-center gap-2">
-               <Spinner 
+               <SpinnerComponent 
                   v-if="isSubmitting" 
                   size="16px" 
                   border-width="2px" 
