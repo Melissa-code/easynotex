@@ -152,7 +152,7 @@ export default {
 </script>
   
 <template>
-  <div class="h-screen flex items-center justify-center bg-[--yellow-light]">
+  <div class="container-create-note flex items-center justify-center bg-[--yellow-light]">
 
     <div class="w-full max-w-xl max-h-full bg-[--yellow] border border-[--dark-green] rounded-2xl flex flex-col overflow-hidden">
       <!-- Title h1 -->
