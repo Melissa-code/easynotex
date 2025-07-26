@@ -1,12 +1,13 @@
 <script>
-import { ref, computed } from 'vue';
-import { useNotificationStore } from '../stores/notifications.js';
-import axios from "axios";
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import SpinnerComponent from '../components/shared/SpinnerComponent.vue'; 
-import CategorySelectComponent from '../components/notes/CategorySelectComponent.vue';  
+import { useNotificationStore } from '../stores/notifications.js';
 import { useCategoriesFetch } from '../composables/categoriesFetch.js';
-
+import { useNoteFormValidations } from '../composables/noteFormValidations.js';
+import { useFileUpload } from '../composables/fileUpload.js';
+import { useNotesApi } from '../composables/notesApi.js';
+import SpinnerComponent from '../components/shared/SpinnerComponent.vue'; 
+import CategorySelectComponent from '../components/notes/CategorySelectComponent.vue'; 
 
 export default {
   name: "CreateNoteView",
@@ -15,11 +16,15 @@ export default {
     CategorySelectComponent
   },    
   setup() {
-    const isSubmitting = ref(false);
     const router = useRouter();
     const notificationStore = useNotificationStore();
 
-    const { categories, isLoading: categoriesLoading } = useCategoriesFetch();
+    // Use composables
+    const { categories } = useCategoriesFetch();
+    const errorMessage = ref('');
+    const { isFormValid, validateForm, validateImage } = useNoteFormValidations();
+    const { selectedFile, handleFileUpload, resetFileInput } = useFileUpload(validateImage);
+    const { isSubmitting, createNote } = useNotesApi();  
 
     const formData = ref({
       title: "",
@@ -30,98 +35,26 @@ export default {
     });
 
     const isOpen = ref(false)// if select is open 
-    const isFormValid = computed(() => {
-      const title = formData.value.title.trim();
-      const content = formData.value.content.trim();
-      const category = formData.value.category;
-      // Regex : accents français et lettres Unicode
-      const validCharsRegex = /^[\p{L}\p{N}\s\-_.,!?'"():;]+$/u;
 
-      return title.length >= 2 && 
-        title.length <= 100 &&
-        validCharsRegex.test(title) &&
-        category !== '' && 
-        content.length >= 3 &&
-        content.length <= 5000 &&
-        validCharsRegex.test(content);
-    });
-
-    const errorMessage = ref('')
-
-    // Handle file upload and validate image type
-    const handleFileUpload = (event) => {
-      const file = event.target.files[0];
-
-      if (file) {
-        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
-
-        if (allowedTypes.includes(file.type)) {
-          formData.value.image = file
-          errorMessage.value = ''
-        } else {
-          errorMessage.value = 'Format d\'image non supporté. Utilisez JPG, PNG, GIF ou WebP.'
-          event.target.value = ''
-        }
-      }
-    };
+    // Validation (en temps réel avec computed)
+    const isFormValidComputed = isFormValid(formData);
 
     //Prevent default form submission and validate required fields
     const submitForm = async (event) => {
       event.preventDefault();
 
-      // Validate required fields
-      const title = formData.value.title.trim();
-      const content = formData.value.content.trim();
-      const validCharsRegex = /^[\p{L}\p{N}\s\-_.,!?'"():;]+$/u;
-
-      if (!validCharsRegex.test(title)) {
-        errorMessage.value = 'Le titre contient des caractères non autorisés.';
-        return;
-      }
-      if (!validCharsRegex.test(content)) {
-        errorMessage.value = 'Le contenu contient des caractères non autorisés.';
-        return;
-      }
-
-      if (!title || !formData.value.category || !content) {
-        errorMessage.value = 'Veuillez remplir les 3 champs obligatoires.';
-        return;
-      }
-
-      if (title.length < 2 || title.length > 100) {
-        errorMessage.value = 'Le titre doit faire au moins 2 caractères et moins de 100 caractères.';
-        return;
-      }
-
-      if (content.length < 3 || content.length > 5000) {
-        errorMessage.value = 'Le contenu doit faire au moins 3 caractères et moins de 5000 caractères.';
+      // Validations data
+      if (!validateForm(formData.value)) {
         return;
       }
 
       if (isSubmitting.value) return; // avoid multiple submissions
-      isSubmitting.value = true;
       
-      errorMessage.value = ''; 
-
-      try {
-        // Create a new FormData object
-        const dataToSend = new FormData()
-        dataToSend.append('title', title);
-        dataToSend.append('category_id', parseInt(formData.value.category));   
-        dataToSend.append('content', content);
-        dataToSend.append('isFavorite', formData.value.isFavorite ? 1 : 0);
-        if (formData.value.image) {
-          dataToSend.append('image', formData.value.image);
-        } 
-        // TODO: Récupérer l'ID de l'utilisateur depuis le store ou le contexte
-        dataToSend.append('user_id', 1); 
-
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/notes/store_note`, dataToSend, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        });
-        console.log('Note créé !!! :', response.data);
+      // create note
+      const result = await createNote(formData.value, selectedFile.value);
+      
+      if (result.success) {
+        console.log('Note créée !!! :', result.data);
         
         // Reset form data
         formData.value = {
@@ -131,27 +64,28 @@ export default {
           image: null,
           isFavorite: false,
         };
-        // inputs type="file" non liés bidirectionnellement avec v-model comme les autres inputs (navigateur garde le nom du fichier)
-        const fileInput = document.querySelector('#image_upload');
-        if (fileInput) fileInput.value = '';
+        resetFileInput(); // Reset file input too
 
         router.push('/');
         
         notificationStore.setSuccess('Note créée avec succès !');
-
-      } catch (error) {
-        console.error('Error creating note:', error);
-        if (error.response) {
-          errorMessage.value = `Erreur ${error.response.status}: ${error.response.data.message || 'Erreur serveur'}`;
-        } else {
-          errorMessage.value = 'Erreur de connexion. Vérifiez que votre serveur est démarré.';
-        }
-      } finally {
-        isSubmitting.value = false; // Reset submitting state
+      } else {
+        console.log('Error resultat :', result); 
+        errorMessage.value = result.error;
       }
     }
 
-    return { formData, errorMessage, handleFileUpload, submitForm, isFormValid, isSubmitting, isOpen, categories, categoriesLoading };
+    return { 
+      formData, 
+      errorMessage, 
+      handleFileUpload, 
+      submitForm, 
+      isFormValid: isFormValidComputed, 
+      isSubmitting,  
+      isOpen,
+      categories,
+      selectedFile
+    };
   }
 };
 </script>
