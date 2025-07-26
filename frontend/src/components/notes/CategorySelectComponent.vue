@@ -54,7 +54,7 @@
       v-model="selectedCategory" 
     >
       <!-- options values: categories -->
-      <option value="" class="">Toutes les catégories</option>
+      <option value="" class="">Catégories</option>
       <option v-for="category in categories" :key="category.id" :value="category.id" class="light-green">
         {{ category.name }}
       </option>

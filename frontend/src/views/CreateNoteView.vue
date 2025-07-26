@@ -4,25 +4,67 @@ import { useNotificationStore } from '../stores/notifications.js';
 import axios from "axios";
 import { useRouter } from 'vue-router';
 import SpinnerComponent from '../components/shared/SpinnerComponent.vue'; 
+import CategorySelectComponent from '../components/notes/CategorySelectComponent.vue';  
 
 
 export default {
   name: "CreateNoteView",
   components: {
-    SpinnerComponent
+    SpinnerComponent,
+    CategorySelectComponent
   },    
-  setup() {
-    const isSubmitting = ref(false);
-    const router = useRouter();
-    const notificationStore = useNotificationStore();
+  data() {
+    return {
+      categories: [],
+      selectedCategory: ""
+    };
+  },
+      mounted() {
+      if (process.env.NODE_ENV !== "test") {
+        this.fetchCategories();
+      }
+    },
+    methods: {
+      async fetchCategories() {
+        try {
+          const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/categories`);
+          this.categories = response.data.categories;
+        } catch (error) {
+          if (error.response) {
+            console.error("Erreur lors de la récupération des catégories", error);
+          } else {
+            console.error("Erreur réseau lors de la récupération des catégories", error);
+          }
+        }
+      },
+      emitSelection() {
+        //this.$emit("category-selected", this.selectedCategory);
+        if (this.selectedCategory === "") {
+          //Emit 'null' to indicate "all categories"
+          this.$emit("category-selected", null); 
+        } else {
+          this.$emit("category-selected", this.selectedCategory);
+        }
+      }
+    },
+    watch: {
+      selectedCategory(newValue) {
+        // Trigger event after selectedCategory change
+        this.emitSelection(); 
+      }
+    },
+    setup() {
+      const isSubmitting = ref(false);
+      const router = useRouter();
+      const notificationStore = useNotificationStore();
 
-    const formData = ref({
-      title: "",
-      category: "",
-      content: "",
-      image: null,
-      isFavorite: false,
-    });
+      const formData = ref({
+        title: "",
+        category: "",
+        content: "",
+        image: null,
+        isFavorite: false,
+      });
 
     const isOpen = ref(false)// if select is open 
     const isFormValid = computed(() => {
@@ -183,9 +225,10 @@ export default {
               @click="isOpen = !isOpen"
               class="appearance-none bg-transparent border-none w-full text-[#7A7A7A] py-1 px-2 leading-tight focus:outline-none focus:bg-[#4ECDC4] focus:text-[#7A7A7A] transition-colors duration-200">
               <option value="" class="bg-[#4ECDC4] focus:text-[#7A7A7A]">Sélectionner une catégorie *</option>
-              <option value="1" class="bg-[#4ECDC4] focus:text-[#7A7A7A]">Note personnelle *</option>
-              <option value="3" class="bg-[#4ECDC4] focus:text-[#7A7A7A]">Finances-Administratif *</option>
-            </select>
+              <option v-for="category in categories" :key="category.id" :value="category.id" class="light-green">
+                {{ category.name }}
+              </option>
+            </select> 
             <!-- Arrow icon -->
             <div class="pointer-events-none absolute right-2 text-[#7A7A7A] transition-transform duration-300"
               :class="{ 'rotate-180': isOpen }">
