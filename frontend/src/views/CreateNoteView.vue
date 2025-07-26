@@ -5,6 +5,7 @@ import axios from "axios";
 import { useRouter } from 'vue-router';
 import SpinnerComponent from '../components/shared/SpinnerComponent.vue'; 
 import CategorySelectComponent from '../components/notes/CategorySelectComponent.vue';  
+import { useCategoriesFetch } from '../composables/categoriesFetch.js';
 
 
 export default {
@@ -13,74 +14,36 @@ export default {
     SpinnerComponent,
     CategorySelectComponent
   },    
-  data() {
-    return {
-      categories: [],
-      selectedCategory: ""
-    };
-  },
-      mounted() {
-      if (process.env.NODE_ENV !== "test") {
-        this.fetchCategories();
-      }
-    },
-    methods: {
-      async fetchCategories() {
-        try {
-          const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/categories`);
-          this.categories = response.data.categories;
-        } catch (error) {
-          if (error.response) {
-            console.error("Erreur lors de la récupération des catégories", error);
-          } else {
-            console.error("Erreur réseau lors de la récupération des catégories", error);
-          }
-        }
-      },
-      emitSelection() {
-        //this.$emit("category-selected", this.selectedCategory);
-        if (this.selectedCategory === "") {
-          //Emit 'null' to indicate "all categories"
-          this.$emit("category-selected", null); 
-        } else {
-          this.$emit("category-selected", this.selectedCategory);
-        }
-      }
-    },
-    watch: {
-      selectedCategory(newValue) {
-        // Trigger event after selectedCategory change
-        this.emitSelection(); 
-      }
-    },
-    setup() {
-      const isSubmitting = ref(false);
-      const router = useRouter();
-      const notificationStore = useNotificationStore();
+  setup() {
+    const isSubmitting = ref(false);
+    const router = useRouter();
+    const notificationStore = useNotificationStore();
 
-      const formData = ref({
-        title: "",
-        category: "",
-        content: "",
-        image: null,
-        isFavorite: false,
-      });
+    const { categories, isLoading: categoriesLoading } = useCategoriesFetch();
+
+    const formData = ref({
+      title: "",
+      category: "",
+      content: "",
+      image: null,
+      isFavorite: false,
+    });
 
     const isOpen = ref(false)// if select is open 
     const isFormValid = computed(() => {
-    const title = formData.value.title.trim();
-    const content = formData.value.content.trim();
-    const category = formData.value.category;
-    // Regex : accents français et lettres Unicode
-    const validCharsRegex = /^[\p{L}\p{N}\s\-_.,!?'"():;]+$/u;
+      const title = formData.value.title.trim();
+      const content = formData.value.content.trim();
+      const category = formData.value.category;
+      // Regex : accents français et lettres Unicode
+      const validCharsRegex = /^[\p{L}\p{N}\s\-_.,!?'"():;]+$/u;
 
-    return title.length >= 2 && 
-      title.length <= 100 &&
-      validCharsRegex.test(title) &&
-      category !== '' && 
-      content.length >= 3 &&
-      content.length <= 5000 &&
-      validCharsRegex.test(content);
+      return title.length >= 2 && 
+        title.length <= 100 &&
+        validCharsRegex.test(title) &&
+        category !== '' && 
+        content.length >= 3 &&
+        content.length <= 5000 &&
+        validCharsRegex.test(content);
     });
 
     const errorMessage = ref('')
@@ -188,7 +151,7 @@ export default {
       }
     }
 
-    return { formData, errorMessage, handleFileUpload, submitForm, isFormValid, isSubmitting,  isOpen };
+    return { formData, errorMessage, handleFileUpload, submitForm, isFormValid, isSubmitting, isOpen, categories, categoriesLoading };
   }
 };
 </script>

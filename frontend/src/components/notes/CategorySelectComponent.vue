@@ -1,48 +1,38 @@
 <script>
-  import axios from "axios";
+  import { ref, watch } from 'vue';
+  import { useCategoriesFetch } from '../../composables/categoriesFetch.js';
 
+  /**
+   * CategorySelectComponent to select a category from a dropdown
+   * Emits the selected category ID or null for "all categories"
+   */
   export default {
     name: 'CategorySelectComponent',
-    data() {
+    setup(props, { emit }) {
+      const { categories, isLoading, error } = useCategoriesFetch();
+      const selectedCategory = ref("");
+
+      const emitSelection = () => {
+        if (selectedCategory.value === "") {
+          // Emit 'null' to indicate "all categories"
+          emit("category-selected", null);
+        } else {
+          emit("category-selected", selectedCategory.value);
+        }
+      };
+
+      watch(selectedCategory, () => {
+        emitSelection();
+      });
+
       return {
-        categories: [],
-        selectedCategory: ""
+        categories,
+        isLoading,
+        error,
+        selectedCategory
       };
     },
-    mounted() {
-      if (process.env.NODE_ENV !== "test") {
-        this.fetchCategories();
-      }
-    },
-    methods: {
-      async fetchCategories() {
-        try {
-          const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/categories`);
-          this.categories = response.data.categories;
-        } catch (error) {
-          if (error.response) {
-            console.error("Erreur lors de la récupération des catégories", error);
-          } else {
-            console.error("Erreur réseau lors de la récupération des catégories", error);
-          }
-        }
-      },
-      emitSelection() {
-        //this.$emit("category-selected", this.selectedCategory);
-        if (this.selectedCategory === "") {
-          //Emit 'null' to indicate "all categories"
-          this.$emit("category-selected", null); 
-        } else {
-          this.$emit("category-selected", this.selectedCategory);
-        }
-      }
-    },
-    watch: {
-      selectedCategory(newValue) {
-        // Trigger event after selectedCategory change
-        this.emitSelection(); 
-      }
-    }
+    emits: ['category-selected']
   };
 </script>
 
@@ -52,9 +42,10 @@
     <select id="category" name="category" aria-label="Category" 
       class="appearance-none col-start-1 row-start-1 w-full rounded-full focus:outline-none" 
       v-model="selectedCategory" 
+      :disabled="isLoading"
     >
       <!-- options values: categories -->
-      <option value="" class="">Catégories</option>
+      <option value="" class="">{{ isLoading ? 'Chargement...' : 'Catégories' }}</option>
       <option v-for="category in categories" :key="category.id" :value="category.id" class="light-green">
         {{ category.name }}
       </option>
