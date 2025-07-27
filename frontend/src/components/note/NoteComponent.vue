@@ -103,8 +103,8 @@ export default {
             try {
                 await axios.delete(`${import.meta.env.VITE_API_URL}/api/notes/supprime_note/${noteId}`);
                 Swal.fire(
-                    'Supprimé !',
-                    'Votre note a été supprimée.',
+                    'Supprimée !',
+                    'Votre note a bien été supprimée.',
                     'success'
                 );
                 // Rediriger vers la page d'accueil ou la liste des notes
