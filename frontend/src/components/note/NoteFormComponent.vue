@@ -53,7 +53,11 @@ export default {
 
 <template>
   <!-- Form -->
-  <form @submit.prevent="$emit('submit', $event)" class="space-y-4 bg-white p-6 rounded-b-2xl flex-1 overflow-y-auto">
+  <form 
+    @submit.prevent="$emit('submit', $event)" 
+    class="space-y-4 bg-white p-6 rounded-b-2xl flex-1 overflow-y-auto"
+    data-testid="note-creation-form"
+  >
     <!-- Title note -->
     <div class="flex items-center border-b border-[--light-green] py-2">
       <input 
@@ -116,7 +120,7 @@ export default {
         <span class="text-[#7A7A7A]">
           {{ selectedFile ? selectedFile.name : 'Choisir une image' }}
         </span>
-        <i class="far fa-image" style="color: #7A7A7A"></i>
+        <i class="far fa-image" style="color: rgb(122, 122, 122);"></i>
       </label>
     </div>
     
@@ -134,7 +138,7 @@ export default {
 
     <!-- Required fields note indication -->
     <div>
-      <small class="text-[--light-green]">* Champs obligatoires</small>
+      <small class="text-[--light-green] required-fields">* Champs obligatoires</small>
     </div>
 
     <!-- Error messages -->
