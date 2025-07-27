@@ -63,6 +63,10 @@ export default {
             return new Date(this.note.updated_at) > new Date(this.note.created_at)
                 ? `Modifiée le ${this.formatDate(this.note.updated_at)}`
                 : `Créée le ${this.formatDate(this.note.created_at)}`;
+        },
+        imageUrl() {
+            if (!this.note?.image) return null;
+            return `${import.meta.env.VITE_API_URL}/storage/${this.note.image}`;
         }
     },
     methods: {
@@ -137,16 +141,15 @@ export default {
                             v-html="displayFavorite()"></span>
                     </li>
                     <!-- content -->
-                    <li class="text-justify pt-3">{{ note?.content || '' }}</li>
+                    <li class="text-justify my-4">{{ note?.content || '' }}</li>
                     <!-- image -->
-                    <li class="py-5" v-if="note.image">
-                        <!-- @error pour détecter une erreur de chargement d’image -->
+                    <li class="mb-4" v-if="note.image">
                         <img 
-                            v-if="imageExists" 
-                            :src="'/uploads/' + note.image" 
+                            v-if="imageUrl"
+                            :src="imageUrl"
                             :alt="'Image de la note n°' + note.id"
                             class="w-32 h-auto cursor-pointer zoomable"
-                            @error="imageExists = false" />
+                        />
                     </li>
 
                     <li class="flex white gap-1">
