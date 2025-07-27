@@ -96,12 +96,12 @@ export default {
   
 <template>
   <div class="container-create-note flex items-center justify-center bg-[--yellow-light]">
-    <div class="w-full max-w-xl max-h-full bg-[--yellow] border border-[--dark-green] rounded-2xl flex flex-col overflow-hidden">
+    <div class="create-note w-full max-w-xl max-h-full bg-[--yellow] border border-[--dark-green] rounded-2xl flex flex-col overflow-hidden">
       
       <!-- Title h1 -->
       <div class="bg-[--yellow] border-b border-[--dark-green]">
         <h1 class="text-2xl font-bold text-center text-[--dark-green]">
-          Créer une nouvelle note
+          Créer une note
         </h1>
       </div>
 
